@@ -1,4 +1,5 @@
 using RPG.Combat;
+using RPG.Core;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,6 +24,7 @@ namespace RPG.Movement
       // only called from non-combat movement
       public void StartMoveAction(Vector3 destination)
       {
+         GetComponent<ActionScheduler>().StartAction(this);
          GetComponent<Fighter>().CancelAttack();
          MoveTo(destination);
       }
