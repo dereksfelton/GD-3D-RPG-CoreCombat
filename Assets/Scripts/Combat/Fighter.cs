@@ -1,5 +1,4 @@
 using RPG.Movement;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPG.Combat
@@ -17,7 +16,9 @@ namespace RPG.Combat
 
       private void Update()
       {
-         if (target != null && Vector3.Distance(transform.position, target.position) > weaponRange)
+         if (target == null) return;
+         
+         if (!TargetIsInRange())
          {
             mover.MoveTo(target.position);
          }
@@ -27,9 +28,19 @@ namespace RPG.Combat
          }
       }
 
+      private bool TargetIsInRange()
+      {
+         return Vector3.Distance(transform.position, target.position) <= weaponRange;
+      }
+
       public void Attack(CombatTarget combatTarget)
       {
          target = combatTarget.transform;
+      }
+
+      public void CancelAttack()
+      {
+         target = null;
       }
    }
 }

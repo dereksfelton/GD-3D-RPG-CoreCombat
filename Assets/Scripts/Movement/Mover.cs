@@ -1,3 +1,4 @@
+using RPG.Combat;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,9 +20,17 @@ namespace RPG.Movement
          UpdateAnimator();
       }
 
+      // only called from non-combat movement
+      public void StartMoveAction(Vector3 destination)
+      {
+         GetComponent<Fighter>().CancelAttack();
+         MoveTo(destination);
+      }
+
       // make this public because we want it to be called from outside
       public void MoveTo(Vector3 destination)
       {
+         
          navMeshAgent.destination = destination;
          navMeshAgent.isStopped = false;
       }
