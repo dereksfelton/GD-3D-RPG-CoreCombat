@@ -16,23 +16,13 @@ public class Mover : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            MoveToCursor();
-        }
         UpdateAnimator();
     }
 
-    private void MoveToCursor()
+    // make this public because we want it to be called from outside
+    public void MoveTo(Vector3 destination)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        bool hasHit = Physics.Raycast(ray, out hit);
-
-        if  (hasHit)
-        {
-            player.GetComponent<NavMeshAgent>().destination = hit.point;
-        }
+        player.GetComponent<NavMeshAgent>().destination = destination;
     }
 
     private void UpdateAnimator()
