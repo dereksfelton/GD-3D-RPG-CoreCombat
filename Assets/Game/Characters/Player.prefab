@@ -37,7 +37,7 @@ Transform:
   m_Children:
   - {fileID: 8323638143700575591}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &3109215492735112705
 MeshRenderer:
@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponRange: 2
+  timeBetweenAttacks: 1
 --- !u!114 &2298550323640950031
 MonoBehaviour:
   m_ObjectHideFlags: 0
