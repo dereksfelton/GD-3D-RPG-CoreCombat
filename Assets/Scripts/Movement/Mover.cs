@@ -1,43 +1,46 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Mover : MonoBehaviour
+namespace RPG.Movement
 {
-    [SerializeField] Transform target;
-
-    Ray lastRay;
-
-    private GameObject player;
-
-    private void Awake()
+    public class Mover : MonoBehaviour
     {
-        player = GameObject.Find("Player");
-    }
+        [SerializeField] Transform target;
 
-    void Update()
-    {
-        UpdateAnimator();
-    }
+        Ray lastRay;
 
-    // make this public because we want it to be called from outside
-    public void MoveTo(Vector3 destination)
-    {
-        player.GetComponent<NavMeshAgent>().destination = destination;
-    }
+        private GameObject player;
 
-    private void UpdateAnimator()
-    {
-        Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+        private void Awake()
+        {
+            player = GameObject.Find("Player");
+        }
 
-        // convert to local value relative to character...
-        // lets you convert global values into local values the animator needs to know
-        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        void Update()
+        {
+            UpdateAnimator();
+        }
 
-        // find how fast I should be moving in a forward direction
-        float speed = localVelocity.z;
+        // make this public because we want it to be called from outside
+        public void MoveTo(Vector3 destination)
+        {
+            player.GetComponent<NavMeshAgent>().destination = destination;
+        }
 
-        // set animator's forwardSpeed value to the speed we calculated...
-        // this effectively does what sliding the blend graph to that value would do
-        GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+        private void UpdateAnimator()
+        {
+            Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+
+            // convert to local value relative to character...
+            // lets you convert global values into local values the animator needs to know
+            Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+
+            // find how fast I should be moving in a forward direction
+            float speed = localVelocity.z;
+
+            // set animator's forwardSpeed value to the speed we calculated...
+            // this effectively does what sliding the blend graph to that value would do
+            GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+        }
     }
 }
