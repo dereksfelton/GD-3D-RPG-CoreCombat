@@ -26,7 +26,13 @@ namespace RPG.Combat
          else
          {
             mover.Cancel();
+            AttackBehavior();
          }
+      }
+
+      private void AttackBehavior()
+      {
+         GetComponent<Animator>().SetTrigger("attack");
       }
 
       private bool TargetIsInRange()
@@ -43,6 +49,12 @@ namespace RPG.Combat
       public void Cancel()
       {
          target = null;
+      }
+
+      // Animation event ... called from animation
+      void Hit()
+      {
+
       }
    }
 }
