@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPG.Combat
 {
-   public class Fighter : MonoBehaviour
+   public class Fighter : MonoBehaviour, IAction
    {
       [SerializeField] float weaponRange;
       private Transform target;
@@ -18,14 +18,14 @@ namespace RPG.Combat
       private void Update()
       {
          if (target == null) return;
-         
+
          if (!TargetIsInRange())
          {
             mover.MoveTo(target.position);
          }
          else
          {
-            mover.Stop();
+            mover.Cancel();
          }
       }
 
@@ -40,7 +40,7 @@ namespace RPG.Combat
          target = combatTarget.transform;
       }
 
-      public void CancelAttack()
+      public void Cancel()
       {
          target = null;
       }
