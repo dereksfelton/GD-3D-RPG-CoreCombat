@@ -45,15 +45,23 @@ namespace RPG.Combat
          // throttle attacks
          if (timeSinceLastAttack >= timeBetweenAttacks)
          {
-            // this triggers the Hit() event
-            GetComponent<Animator>().SetTrigger("attack");
-            timeSinceLastAttack = 0f;
+            TriggerAttack();
          }
       }
 
-      // Animation event ... called from animation ... this is when the punch "lands"
+      private void TriggerAttack()
+      {
+         // this triggers the Hit() event
+         GetComponent<Animator>().ResetTrigger("stopAttack");
+         GetComponent<Animator>().SetTrigger("attack");
+         timeSinceLastAttack = 0f;
+      }
+
+      // Animation event...
+      // this method is called from animation in exactly the frame when the punch "lands"
       void Hit()
       {
+         if (target == null) return;
          target.TakeDamage(weaponDamage);
       }
 
@@ -78,6 +86,12 @@ namespace RPG.Combat
 
       public void Cancel()
       {
+         StopAttack();
+      }
+
+      private void StopAttack()
+      {
+         GetComponent<Animator>().ResetTrigger("attack");
          GetComponent<Animator>().SetTrigger("stopAttack");
          target = null;
       }
