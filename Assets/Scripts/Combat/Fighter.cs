@@ -39,6 +39,9 @@ namespace RPG.Combat
 
       private void AttackBehavior()
       {
+         // make sure we're facing the target
+         transform.LookAt(target.transform);
+         
          // throttle attacks
          if (timeSinceLastAttack >= timeBetweenAttacks)
          {
@@ -57,6 +60,14 @@ namespace RPG.Combat
       private bool TargetIsInRange()
       {
          return Vector3.Distance(transform.position, target.transform.position) <= weaponRange;
+      }
+
+      public bool CanAttack(CombatTarget combatTarget)
+      {
+         if (combatTarget == null) return false;
+         
+         Health targetToTest = combatTarget.GetComponent<Health>();
+         return targetToTest != null && !targetToTest.IsDead;
       }
 
       public void Attack(CombatTarget combatTarget)

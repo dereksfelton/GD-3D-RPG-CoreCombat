@@ -18,9 +18,9 @@ namespace RPG.Control
          RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
          foreach (RaycastHit hit in hits)
          {
-            // see if this hit is a CombatTarget
+            // see if this hit is a CombatTarget that isn't dead
             CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-            if (target == null) continue;
+            if (!GetComponent<Fighter>().CanAttack(target)) continue;
 
             // if so, and if we clicked the left mouse button...
             if (Input.GetMouseButtonDown(0))
