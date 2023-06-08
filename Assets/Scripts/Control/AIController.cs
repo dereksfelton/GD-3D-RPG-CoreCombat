@@ -1,5 +1,6 @@
 using RPG.Combat;
 using RPG.Core;
+using RPG.Movement;
 using UnityEngine;
 
 namespace RPG.Control
@@ -10,13 +11,20 @@ namespace RPG.Control
 
       // cached references
       Fighter fighter;
-      GameObject player;
       Health health;
+      Mover mover;
+      GameObject player;
+
+      Vector3 guardPosition;
 
       private void Start() {
          fighter = GetComponent<Fighter>();
          health = GetComponent<Health>();
+         mover = GetComponent<Mover>();
          player = GameObject.FindWithTag("Player");
+
+         // set my guard location as my startup position
+         guardPosition = transform.position;
       }
 
       private void Update()
@@ -29,7 +37,7 @@ namespace RPG.Control
          }
          else
          {
-            fighter.Cancel();
+            mover.StartMoveAction(guardPosition);
          }
       }
 
@@ -37,6 +45,12 @@ namespace RPG.Control
       {
          float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
          return distanceToPlayer <= chaseDistance;
+      }
+
+      // called by Unity...
+      private void OnDrawGizmosSelected() {
+         Gizmos.color = Color.blue;
+         Gizmos.DrawWireSphere(transform.position, chaseDistance);
       }
    }
 }
