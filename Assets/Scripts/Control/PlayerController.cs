@@ -20,12 +20,14 @@ namespace RPG.Control
          {
             // see if this hit is a CombatTarget that isn't dead
             CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-            if (!GetComponent<Fighter>().CanAttack(target)) continue;
+            if (target == null) continue;
+
+            if (!GetComponent<Fighter>().CanAttack(target.gameObject)) continue;
 
             // if so, and if we clicked the left mouse button...
             if (Input.GetMouseButtonDown(0))
             {
-               GetComponent<Fighter>().Attack(target);
+               GetComponent<Fighter>().Attack(target.gameObject);
             }
 
             // return that we DID interact with combat,
