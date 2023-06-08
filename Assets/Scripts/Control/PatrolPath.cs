@@ -20,12 +20,12 @@ namespace RPG.Control
          }
       }
 
-      private Vector3 GetWaypoint(int i)
+      public Vector3 GetWaypoint(int i)
       {
          return transform.GetChild(i).position;
       }
 
-      private int GetNextWaypointIndex(int i)
+      public int GetNextWaypointIndex(int i)
       {
          return (i + 1 == transform.childCount) ? 0 : i + 1;
       }

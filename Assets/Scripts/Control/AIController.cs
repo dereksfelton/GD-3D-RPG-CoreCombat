@@ -1,3 +1,4 @@
+using System;
 using RPG.Combat;
 using RPG.Core;
 using RPG.Movement;
@@ -9,6 +10,9 @@ namespace RPG.Control
    {
       [SerializeField] float chaseDistance = 5f;
       [SerializeField] float suspicionDuration = 5f; // in seconds
+      [SerializeField] float waypointTolerance = 1f; // in meters
+
+      [SerializeField] PatrolPath patrolPath;
 
       // cached references
       Fighter fighter;
@@ -18,6 +22,7 @@ namespace RPG.Control
 
       Vector3 guardPosition;
       float timeSinceLastSawPlayer = Mathf.Infinity;
+      int currentWaypointIndex = 0; // note irrelevant if a PatrolPath isn't assigned
 
       private void Start() {
          fighter = GetComponent<Fighter>();
@@ -47,7 +52,7 @@ namespace RPG.Control
          // otherwise, return to my guard position
          else
          {
-            GuardBehavior();
+            PatrolBehavior();
          }
 
          timeSinceLastSawPlayer += Time.deltaTime;
@@ -63,9 +68,37 @@ namespace RPG.Control
          GetComponent<ActionScheduler>().CancelCurrentAction();
       }
 
-      private void GuardBehavior()
+      private void PatrolBehavior()
       {
-         mover.StartMoveAction(guardPosition);
+         Vector3 nextPosition = guardPosition; // default when no patrol path is assigned
+
+         if (patrolPath != null)
+         {
+            if (AtWaypoint())
+            {
+               CycleWaypoint();
+            }
+            nextPosition = GetCurrentWaypoint();
+         }
+
+         mover.StartMoveAction(nextPosition);
+      }
+
+      private bool AtWaypoint()
+      {
+         float distanceToWaypoint = Vector3.Distance(transform.position, GetCurrentWaypoint());
+         print($"{gameObject.name} is {distanceToWaypoint} from waypoint");
+         return distanceToWaypoint <= waypointTolerance;
+      }
+
+      private void CycleWaypoint()
+      {
+         currentWaypointIndex = patrolPath.GetNextWaypointIndex(currentWaypointIndex);
+      }
+
+      private Vector3 GetCurrentWaypoint()
+      {
+         return patrolPath.GetWaypoint(currentWaypointIndex);
       }
 
       private bool InAttackRangeOfPlayer()
