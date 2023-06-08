@@ -30,7 +30,6 @@ namespace RPG.Movement
       // make this public because we want it to be called from outside
       public void MoveTo(Vector3 destination)
       {
-
          navMeshAgent.destination = destination;
          navMeshAgent.isStopped = false;
       }

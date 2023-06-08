@@ -4,9 +4,13 @@ namespace RPG.Combat
 {
    public class Health : MonoBehaviour
    {
-      private bool isDead = false;
+      public bool IsDead { get; private set; }
 
       [SerializeField] float healthPoints = 100f;
+
+      private void Awake() {
+         IsDead = false;
+      }
 
       public void TakeDamage(float damage)
       {
@@ -20,10 +24,10 @@ namespace RPG.Combat
 
       private void Die()
       {
-         if (isDead) return;
+         if (IsDead) return;
 
          //  trigger the death animation
-         isDead = true;
+         IsDead = true;
          GetComponent<Animator>().SetTrigger("die");
       }
    }
