@@ -42,12 +42,17 @@ namespace RPG.Combat
          // throttle attacks
          if (timeSinceLastAttack >= timeBetweenAttacks)
          {
+            // this triggers the Hit() event
             GetComponent<Animator>().SetTrigger("attack");
             timeSinceLastAttack = 0f;
-
-            Health targetHealth = target.GetComponent<Health>();
-            targetHealth.TakeDamage(weaponDamage);
          }
+      }
+
+      // Animation event ... called from animation ... this is when the punch "lands"
+      void Hit()
+      {
+         Health targetHealth = target.GetComponent<Health>();
+         targetHealth.TakeDamage(weaponDamage);
       }
 
       private bool TargetIsInRange()
@@ -64,12 +69,6 @@ namespace RPG.Combat
       public void Cancel()
       {
          target = null;
-      }
-
-      // Animation event ... called from animation
-      void Hit()
-      {
-
       }
    }
 }
