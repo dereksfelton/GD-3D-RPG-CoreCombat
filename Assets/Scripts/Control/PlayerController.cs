@@ -54,7 +54,7 @@ namespace RPG.Control
          {
             if (Input.GetMouseButton(0))
             {
-               GetComponent<Mover>().StartMoveAction(hit.point);
+               GetComponent<Mover>().StartMoveAction(hit.point, 1f);
             }
             // return that we DID interact with movement,
             // even if we just hovered over a movement target

@@ -6,8 +6,8 @@ namespace RPG.Movement
 {
    public class Mover : MonoBehaviour, IAction
    {
+      [SerializeField] float maxSpeed = 6f;
       Transform target;
-
       NavMeshAgent navMeshAgent;
       Health health;
 
@@ -26,16 +26,18 @@ namespace RPG.Movement
       }
 
       // only called from non-combat movement
-      public void StartMoveAction(Vector3 destination)
+      public void StartMoveAction(Vector3 destination, float speedFraction)
       {
          GetComponent<ActionScheduler>().StartAction(this);
-         MoveTo(destination);
+         MoveTo(destination, speedFraction);
       }
 
       // make this public because we want it to be called from outside
-      public void MoveTo(Vector3 destination)
+      public void MoveTo(Vector3 destination, float speedFraction)
       {
          navMeshAgent.destination = destination;
+         navMeshAgent.speed = 
+            maxSpeed * Mathf.Clamp01(speedFraction); // ensure value is between 0 and 1
          navMeshAgent.isStopped = false;
       }
 

@@ -28,7 +28,8 @@ namespace RPG.Combat
 
          if (!TargetIsInRange())
          {
-            mover.MoveTo(target.transform.position);
+            // 0.9f for speedFraction, because we want chasing to be at almost full speed
+            mover.MoveTo(target.transform.position, 0.9f);
          }
          else
          {

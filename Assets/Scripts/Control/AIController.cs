@@ -12,6 +12,9 @@ namespace RPG.Control
       [SerializeField] float suspicionDuration = 5f; // in seconds
       [SerializeField] float waypointDistanceTolerance = 1f; // in meters
       [SerializeField] float waypointDwellTime = 3f; // in seconds
+      
+      [Range(0, 1)]
+      [SerializeField] float patrolSpeedFraction = 0.2f; // as a percentage of Mover.maxSpeed
 
       [SerializeField] PatrolPath patrolPath;
 
@@ -92,7 +95,7 @@ namespace RPG.Control
 
          if (timeSinceArrivedAtWaypoint > waypointDwellTime)
          {
-            mover.StartMoveAction(nextPosition);
+            mover.StartMoveAction(nextPosition, patrolSpeedFraction);
          }
       }
 
