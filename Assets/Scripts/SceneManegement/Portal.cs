@@ -1,13 +1,16 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace RPG.SceneManagement
 {
    public class Portal : MonoBehaviour
    {
+      [SerializeField] int sceneToLoad = -1;
+
       void OnTriggerEnter(Collider other) {
          if (other.gameObject.CompareTag("Player"))
          {
-            print ("Portal entered");
+            SceneManager.LoadScene(sceneToLoad);
          }
       }
    }
