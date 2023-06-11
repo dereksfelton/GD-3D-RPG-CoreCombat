@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,8 +11,18 @@ namespace RPG.SceneManagement
       void OnTriggerEnter(Collider other) {
          if (other.gameObject.CompareTag("Player"))
          {
-            SceneManager.LoadScene(sceneToLoad);
+            StartCoroutine(Transition());
          }
+      }
+
+      private IEnumerator Transition()
+      {
+         // NOTE: DontDestroyOnLoad only works when gameObject is at scene root!
+         DontDestroyOnLoad(gameObject); 
+         AsyncOperation loadingScene = SceneManager.LoadSceneAsync(sceneToLoad);
+         while (!loadingScene.isDone) yield return null;
+         print("Scene loaded");
+         Destroy(gameObject);
       }
    }
 }
