@@ -1321,6 +1321,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 350298631}
     m_Modifications:
+    - target: {fileID: 3196208375919329125, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 78f0b503-1ab7-442b-a52e-9a332977179b
+      objectReference: {fileID: 0}
     - target: {fileID: 3692847924865048772, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: m_Name
       value: Enemy-Curly
@@ -1575,6 +1579,10 @@ PrefabInstance:
     - target: {fileID: 707203271834986513, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: weaponDamage
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 3196208375919329125, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
+      propertyPath: uniqueIdentifier
+      value: c174a12b-d781-4270-a205-3c124ecbb080
       objectReference: {fileID: 0}
     - target: {fileID: 3692847924865048772, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: m_Name
@@ -1856,6 +1864,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 350298631}
     m_Modifications:
+    - target: {fileID: 3196208375919329125, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
+      propertyPath: uniqueIdentifier
+      value: ebf49234-96d0-43b7-a377-385f62daedd1
+      objectReference: {fileID: 0}
     - target: {fileID: 3692847924865048772, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: m_Name
       value: Enemy-Larry
@@ -1921,6 +1933,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 350298631}
     m_Modifications:
+    - target: {fileID: 3196208375919329125, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
+      propertyPath: uniqueIdentifier
+      value: a84beaae-6e63-43bc-9101-d3d3d8bfb241
+      objectReference: {fileID: 0}
     - target: {fileID: 3692847924865048772, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: m_Name
       value: Enemy-Moe
@@ -2987,7 +3003,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062689156}
-  m_LocalRotation: {x: 0.19520372, y: 0.20374738, z: -0.041495647, w: 0.9584679}
+  m_LocalRotation: {x: 0.19520372, y: 0.2037474, z: -0.04149565, w: 0.9584679}
   m_LocalPosition: {x: -20.33, y: 2.87, z: 16.95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3494,6 +3510,10 @@ PrefabInstance:
     - target: {fileID: 495410190464442406, guid: 92225d3f87e26a943a8e9dae66f8545c, type: 3}
       propertyPath: m_Name
       value: Core
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146422626023364641, guid: 92225d3f87e26a943a8e9dae66f8545c, type: 3}
+      propertyPath: uniqueIdentifier
+      value: 3c4d043c-6161-4c22-b7fc-54f78513ec13
       objectReference: {fileID: 0}
     - target: {fileID: 4652186774739183180, guid: 92225d3f87e26a943a8e9dae66f8545c, type: 3}
       propertyPath: m_RootOrder

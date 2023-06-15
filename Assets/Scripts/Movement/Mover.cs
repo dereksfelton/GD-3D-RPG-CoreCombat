@@ -1,10 +1,12 @@
 using RPG.Core;
+using RPG.Saving;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 namespace RPG.Movement
 {
-   public class Mover : MonoBehaviour, IAction
+   public class Mover : MonoBehaviour, IAction, ISaveable
    {
       [SerializeField] float maxSpeed = 6f;
       Transform target;
@@ -60,6 +62,20 @@ namespace RPG.Movement
          // set animator's forwardSpeed value to the speed we calculated...
          // this effectively does what sliding the blend graph to that value would do
          GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+      }
+
+      // implement ISaveable interface_________________________________________________
+      public object CaptureState()
+      {
+         return new SerializableVector3(transform.position);
+      }
+
+      public void RestoreState(object state)
+      {
+         SerializableVector3 position = (SerializableVector3)state;
+         GetComponent<NavMeshAgent>().enabled = false;
+         transform.position = position.ToVector();
+         GetComponent<NavMeshAgent>().enabled = true;
       }
    }
 }
