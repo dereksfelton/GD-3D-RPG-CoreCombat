@@ -1,8 +1,10 @@
+using RPG.Saving;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace RPG.Core
 {
-   public class Health : MonoBehaviour
+   public class Health : MonoBehaviour, ISaveable
    {
       public bool IsDead { get; private set; }
 
@@ -32,6 +34,22 @@ namespace RPG.Core
 
          // cancel currently running actions
          GetComponent<ActionScheduler>().CancelCurrentAction();
+      }
+
+      // implement ISaveable interface_________________________________________________
+      public object CaptureState()
+      {
+         return healthPoints;
+      }
+
+      public void RestoreState(object state)
+      {
+         healthPoints = (float)state;
+
+         if (healthPoints == 0)
+         {
+            Die();
+         }
       }
    }
 }
