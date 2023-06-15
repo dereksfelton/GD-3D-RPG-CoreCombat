@@ -126,5 +126,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2765b5ad3ed6e8f4c9b2d764739772d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: -1
+  portalId: 0
+  destinationMap: -1
+  destinationPortalId: 0
   spawnPoint: {fileID: 2089651654030567572}
+  fadeOutDuration: 0.5
+  fadeInDuration: 1
+  waitWhileFadedDuration: 0.5

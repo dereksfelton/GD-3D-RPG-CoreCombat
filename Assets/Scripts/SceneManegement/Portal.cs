@@ -38,6 +38,11 @@ namespace RPG.SceneManagement
       // reference to the portal instance's spawn point, assigned in Prefab editor
       [SerializeField] Transform spawnPoint;
 
+      // fader duration values
+      [SerializeField] float fadeOutDuration = 1.5f;
+      [SerializeField] float fadeInDuration = 1.5f;
+      [SerializeField] float waitWhileFadedDuration = 0.5f;
+
       void OnTriggerEnter(Collider other) {
          // if this is a one-way destination, don't do anything
          if (destinationMap == Map.None) return;
@@ -60,6 +65,10 @@ namespace RPG.SceneManagement
          // determine whether we're moving to a new map
          bool movingToNewMap = sceneBuildIndex != destMapIndex;
 
+         // get reference to Fader & fade out
+         Fader fader = FindObjectOfType<Fader>();
+         yield return fader.FadeOut(fadeOutDuration);
+
          //only load new scene if we're moving to a new map
          if (movingToNewMap)
          {
@@ -71,11 +80,15 @@ namespace RPG.SceneManagement
             while (!loadingScene.isDone) yield return null;
          }
 
-         // after new scene loads find the other portal
+         // find the other portal
          Portal otherPortal = GetOtherPortal();
          
          // update player location and rotation based on the portal found
          UpdatePlayer(otherPortal);
+
+         // wait while faded out (to let camera to settle, etc.), then fade in
+         yield return new WaitForSeconds(waitWhileFadedDuration);
+         yield return fader.FadeIn(fadeInDuration);
 
          // finally destroy this portal object, but only if we've moved to a new map
          if (movingToNewMap) Destroy(gameObject);
