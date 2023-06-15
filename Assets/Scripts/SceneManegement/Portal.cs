@@ -75,9 +75,16 @@ namespace RPG.SceneManagement
             // NOTE: DontDestroyOnLoad only works when gameObject is at scene root!
             DontDestroyOnLoad(gameObject);
 
+            // save state of scene we're leaving
+            SavingWrapper savingWrapper = FindFirstObjectByType<SavingWrapper>();
+            savingWrapper.Save();
+
             // load new scene asynchronously; wait until fully loaded
             AsyncOperation loadingScene = SceneManager.LoadSceneAsync(destMapIndex);
             while (!loadingScene.isDone) yield return null;
+
+            // load state of scene we're entering
+            savingWrapper.Load();
          }
 
          // find the other portal
