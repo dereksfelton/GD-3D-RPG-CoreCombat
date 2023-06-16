@@ -13,13 +13,21 @@ namespace RPG.Saving
     {
         public IEnumerator LoadLastScene(string saveFile)
         {
+            // get state
             Dictionary<string, object> state = LoadFile(saveFile);
+            
+            // load last scene
             int buildIndex = SceneManager.GetActiveScene().buildIndex;
             if (state.ContainsKey("lastSceneBuildIndex"))
             {
-                buildIndex = (int)state["lastSceneBuildIndex"];
+                int buildIndex = (int)state["lastSceneBuildIndex"];
+                if (buildIndex != SceneManager.GetActiveScene().buildIndex)
+                {
+                    yield return SceneManager.LoadSceneAsync(buildIndex);
+                }
             }
-            yield return SceneManager.LoadSceneAsync(buildIndex);
+
+            // restore state
             RestoreState(state);
         }
 
