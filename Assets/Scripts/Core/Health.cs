@@ -36,22 +36,6 @@ namespace RPG.Core
          GetComponent<ActionScheduler>().CancelCurrentAction();
       }
 
-      // implement ISaveable interface_________________________________________________
-      public object CaptureState()
-      {
-         return healthPoints;
-      }
-
-      public void RestoreState(object state)
-      {
-         healthPoints = (float)state;
-
-         if (healthPoints <= 0)
-         {
-            Die();
-         }
-      }
-
       // implement IJsonSaveable interface_________________________________________________
       public JToken CaptureAsJToken()
       {
