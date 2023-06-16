@@ -113,8 +113,10 @@ namespace RPG.SceneManagement
          NavMeshAgent navMeshAgent = player.GetComponent<NavMeshAgent>();
 
          // move and rotate player based on the destination portal's spawn point
+         navMeshAgent.enabled = false;
          navMeshAgent.Warp(otherPortal.spawnPoint.position);
          player.transform.rotation = otherPortal.spawnPoint.rotation;
+         navMeshAgent.enabled = true;
       }
 
       private Portal GetOtherPortal()
