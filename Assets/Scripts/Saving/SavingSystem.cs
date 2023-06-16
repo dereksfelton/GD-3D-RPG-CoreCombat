@@ -17,7 +17,6 @@ namespace RPG.Saving
             Dictionary<string, object> state = LoadFile(saveFile);
             
             // load last scene
-            int buildIndex = SceneManager.GetActiveScene().buildIndex;
             if (state.ContainsKey("lastSceneBuildIndex"))
             {
                 int buildIndex = (int)state["lastSceneBuildIndex"];
