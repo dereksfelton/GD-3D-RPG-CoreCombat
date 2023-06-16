@@ -1,5 +1,6 @@
 using RPG.Core;
 using RPG.Saving;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -65,16 +66,41 @@ namespace RPG.Movement
       }
 
       // implement ISaveable interface_________________________________________________
+      [System.Serializable]
+      struct MoverSaveData
+      {
+         public SerializableVector3 position;
+         public SerializableVector3 rotation;
+      }
       public object CaptureState()
       {
-         return new SerializableVector3(transform.position);
+         // capture multiple values in the form of a dictionary
+         // Dictionary<string, object> data = new Dictionary<string, object>();
+         // data["position"] = new SerializableVector3(transform.position);
+         // data["rotation"] = new SerializableVector3(transform.eulerAngles);
+
+         // capture multiple values in the form of a struct
+         MoverSaveData data = new MoverSaveData();
+         data.position = new SerializableVector3(transform.position);
+         data.rotation = new SerializableVector3(transform.eulerAngles);
+
+         return data;
       }
 
       public void RestoreState(object state)
       {
-         SerializableVector3 position = (SerializableVector3)state;
+         // read in multiple values in the form of a dictionary
+         //Dictionary<string, object> data = (Dictionary<string, object>)state;
+
+         // read in multiple values in the form of a struct
+         MoverSaveData data = (MoverSaveData)state;
+
          GetComponent<NavMeshAgent>().enabled = false;
-         transform.position = position.ToVector();
+         //transform.position = ((SerializableVector3)data["position"]).ToVector();
+         //transform.eulerAngles = ((SerializableVector3)data["rotation"]).ToVector();
+         transform.position = data.position.ToVector();
+         transform.eulerAngles = data.rotation.ToVector();
+
          GetComponent<NavMeshAgent>().enabled = true;
       }
    }

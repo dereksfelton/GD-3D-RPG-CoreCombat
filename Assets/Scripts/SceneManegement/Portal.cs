@@ -69,6 +69,9 @@ namespace RPG.SceneManagement
          Fader fader = FindObjectOfType<Fader>();
          yield return fader.FadeOut(fadeOutDuration);
 
+         // get a reference to the saving wrapper
+         SavingWrapper savingWrapper = FindFirstObjectByType<SavingWrapper>();
+
          //only load new scene if we're moving to a new map
          if (movingToNewMap)
          {
@@ -76,7 +79,6 @@ namespace RPG.SceneManagement
             DontDestroyOnLoad(gameObject);
 
             // save state of scene we're leaving
-            SavingWrapper savingWrapper = FindFirstObjectByType<SavingWrapper>();
             savingWrapper.Save();
 
             // load new scene asynchronously; wait until fully loaded
@@ -92,6 +94,9 @@ namespace RPG.SceneManagement
          
          // update player location and rotation based on the portal found
          UpdatePlayer(otherPortal);
+
+         // save again now that player is in new scene
+         savingWrapper.Save();
 
          // wait while faded out (to let camera to settle, etc.), then fade in
          yield return new WaitForSeconds(waitWhileFadedDuration);
