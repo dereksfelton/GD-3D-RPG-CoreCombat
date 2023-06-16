@@ -8,9 +8,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2505737290011776484, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
+      propertyPath: uniqueIdentifier
+      value: player
+      objectReference: {fileID: 0}
     - target: {fileID: 4043381291867478919, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4043381291867478919, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: m_LocalPosition.x
