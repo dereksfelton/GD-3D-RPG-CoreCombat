@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4043381291867478919, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4043381291867478919, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: m_LocalPosition.x
@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: weaponPrefab
       value: 
       objectReference: {fileID: 7572515903940045785, guid: 8a2476754f1080f4b81d24fa5751b040, type: 3}
+    - target: {fileID: 6253825760537724821, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
+      propertyPath: defaultWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: ab2d935fb10711b4b9d790cc339d1028, type: 2}
     - target: {fileID: 6253825760537724821, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: handTransform
       value: 
