@@ -1,13 +1,12 @@
+using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Saving;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 namespace RPG.Movement
 {
-   public class Mover : MonoBehaviour, IAction, ISaveable
+   public class Mover : MonoBehaviour, IAction, IJsonSaveable
    {
       [SerializeField] float maxSpeed = 6f;
       Transform target;
@@ -69,38 +68,25 @@ namespace RPG.Movement
       [System.Serializable]
       struct MoverSaveData
       {
-         public SerializableVector3 position;
-         public SerializableVector3 rotation;
+         public JToken position;
+         public JToken rotation;
       }
-      public object CaptureState()
-      {
-         // capture multiple values in the form of a dictionary
-         // Dictionary<string, object> data = new Dictionary<string, object>();
-         // data["position"] = new SerializableVector3(transform.position);
-         // data["rotation"] = new SerializableVector3(transform.eulerAngles);
 
-         // capture multiple values in the form of a struct
+      public JToken CaptureAsJToken()
+      {
          MoverSaveData data = new MoverSaveData();
-         data.position = new SerializableVector3(transform.position);
-         data.rotation = new SerializableVector3(transform.eulerAngles);
-
-         return data;
+         data.position = transform.position.ToToken();
+         data.rotation = transform.eulerAngles.ToToken();
+         return JToken.FromObject(data);
       }
 
-      public void RestoreState(object state)
+      public void RestoreFromJToken(JToken state)
       {
-         // read in multiple values in the form of a dictionary
-         //Dictionary<string, object> data = (Dictionary<string, object>)state;
-
-         // read in multiple values in the form of a struct
-         MoverSaveData data = (MoverSaveData)state;
+         MoverSaveData data = state.ToObject<MoverSaveData>();
 
          GetComponent<NavMeshAgent>().enabled = false;
-         //transform.position = ((SerializableVector3)data["position"]).ToVector();
-         //transform.eulerAngles = ((SerializableVector3)data["rotation"]).ToVector();
-         transform.position = data.position.ToVector();
-         transform.eulerAngles = data.rotation.ToVector();
-
+         transform.position = data.position.ToVector3();
+         transform.eulerAngles = data.rotation.ToVector3();
          GetComponent<NavMeshAgent>().enabled = true;
       }
    }

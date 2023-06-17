@@ -1,10 +1,10 @@
+using Newtonsoft.Json.Linq;
 using RPG.Saving;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace RPG.Core
 {
-   public class Health : MonoBehaviour, ISaveable
+   public class Health : MonoBehaviour, IJsonSaveable
    {
       public bool IsDead { get; private set; }
 
@@ -36,15 +36,15 @@ namespace RPG.Core
          GetComponent<ActionScheduler>().CancelCurrentAction();
       }
 
-      // implement ISaveable interface_________________________________________________
-      public object CaptureState()
+      // implement IJsonSaveable interface_________________________________________________
+      public JToken CaptureAsJToken()
       {
-         return healthPoints;
+         return JToken.FromObject(healthPoints);
       }
 
-      public void RestoreState(object state)
+      public void RestoreFromJToken(JToken state)
       {
-         healthPoints = (float)state;
+         healthPoints = state.ToObject<float>();
 
          if (healthPoints <= 0)
          {
