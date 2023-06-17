@@ -6,9 +6,11 @@ namespace RPG.Combat
 {
    public class Fighter : MonoBehaviour, IAction
    {
-      [SerializeField] float weaponRange;
-      [SerializeField] float timeBetweenAttacks;
+      [SerializeField] float weaponRange = 2f;
+      [SerializeField] float timeBetweenAttacks = 1f;
       [SerializeField] float weaponDamage = 5f;
+      [SerializeField] GameObject weaponPrefab = null;
+      [SerializeField] Transform handTransform = null;
 
       private Health target;
       private Mover mover;
@@ -17,6 +19,8 @@ namespace RPG.Combat
       private void Start()
       {
          mover = GetComponent<Mover>();
+
+         SpawnWeapon();
       }
 
       private void Update()
@@ -96,6 +100,11 @@ namespace RPG.Combat
          GetComponent<Animator>().ResetTrigger("attack");
          GetComponent<Animator>().SetTrigger("stopAttack");
          target = null;
+      }
+
+      private void SpawnWeapon()
+      {
+         Instantiate(weaponPrefab, handTransform);
       }
    }
 }
