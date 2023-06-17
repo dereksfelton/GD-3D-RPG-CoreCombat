@@ -2,7 +2,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RPG.JsonSaving
+namespace RPG.Saving
 {
    public interface IJsonSaveable
    {

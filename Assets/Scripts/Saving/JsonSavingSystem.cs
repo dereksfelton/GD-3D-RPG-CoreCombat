@@ -1,16 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace RPG.JsonSaving
+namespace RPG.Saving
 {
    public class JsonSavingSystem : MonoBehaviour
    {
-      private const string extension = ".json";
+      [SerializeField] SavingStrategy strategy;
 
       /// <summary>
       /// Will load the last scene that was saved and restore the state. This
@@ -57,7 +56,7 @@ namespace RPG.JsonSaving
       {
          foreach (string path in Directory.EnumerateFiles(Application.persistentDataPath))
          {
-            if (Path.GetExtension(path) == extension)
+            if (Path.GetExtension(path) == strategy.GetExtension())
             {
                yield return Path.GetFileNameWithoutExtension(path);
             }
@@ -68,36 +67,14 @@ namespace RPG.JsonSaving
 
       private JObject LoadJsonFromFile(string saveFile)
       {
-         string path = GetPathFromSaveFile(saveFile);
-         if (!File.Exists(path))
-         {
-            return new JObject();
-         }
-
-         using (var textReader = File.OpenText(path))
-         {
-            using (var reader = new JsonTextReader(textReader))
-            {
-               reader.FloatParseHandling = FloatParseHandling.Double;
-
-               return JObject.Load(reader);
-            }
-         }
+         return strategy.LoadFromFile(saveFile);
       }
 
       private void SaveFileAsJSon(string saveFile, JObject state)
       {
-         string path = GetPathFromSaveFile(saveFile);
-         print("Saving to " + path);
-         using (var textWriter = File.CreateText(path))
-         {
-            using (var writer = new JsonTextWriter(textWriter))
-            {
-               writer.Formatting = Formatting.Indented;
-               state.WriteTo(writer);
-            }
-         }
+         strategy.SaveToFile(saveFile, state);
       }
+
 
       private void CaptureAsToken(JObject state)
       {
@@ -124,9 +101,11 @@ namespace RPG.JsonSaving
          }
       }
 
+
       private string GetPathFromSaveFile(string saveFile)
       {
-         return Path.Combine(Application.persistentDataPath, saveFile + extension);
+         return strategy.GetPathFromSaveFile(saveFile);
       }
    }
 }
+
