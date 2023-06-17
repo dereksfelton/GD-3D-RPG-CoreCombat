@@ -66,6 +66,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 417656, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}
   m_PrefabInstance: {fileID: 6540735860366841796}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &6540735860366991562 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 423694, guid: 30cf93deff988e74e88a144bd2127c18, type: 3}
+  m_PrefabInstance: {fileID: 6540735860366841796}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6852913778061619076
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -126,6 +131,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6253825760537724821, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
+      propertyPath: weapon
+      value: 
+      objectReference: {fileID: 11400000, guid: ab2d935fb10711b4b9d790cc339d1028, type: 2}
+    - target: {fileID: 6253825760537724821, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
+      propertyPath: handTransform
+      value: 
+      objectReference: {fileID: 6540735860366991562}
     - target: {fileID: 6661269929744090182, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: m_Speed
       value: 3
