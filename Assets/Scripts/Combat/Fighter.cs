@@ -66,8 +66,28 @@ namespace RPG.Combat
       // this method is called from animation in exactly the frame when the punch "lands"
       void Hit()
       {
+         HandleAttack();
+      }
+
+      // Animation event...
+      // this method is called from animation in exactly the frame when an arrow is shot
+      void Shoot()
+      {
+         HandleAttack();
+      }
+
+      private void HandleAttack()
+      {
          if (target == null) return;
-         target.TakeDamage(currentWeapon.Damage);
+
+         if (currentWeapon.HasProjectile)
+         {
+            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);
+         }
+         else
+         {
+            target.TakeDamage(currentWeapon.Damage);
+         }
       }
 
       private bool TargetIsInRange()
