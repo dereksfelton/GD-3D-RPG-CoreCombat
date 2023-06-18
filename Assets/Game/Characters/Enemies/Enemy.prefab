@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100456904505408780, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: healthPoints
-      value: 15
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4043381291867478919, guid: 3d8a85233ff1aa348a104a929ea73048, type: 3}
       propertyPath: m_RootOrder
