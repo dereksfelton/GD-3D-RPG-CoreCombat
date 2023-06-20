@@ -1,4 +1,5 @@
 ﻿using RPG.Core;
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,17 +21,41 @@ namespace RPG.Combat
       public float Damage { get { return weaponDamage; } }
       public bool HasProjectile { get { return projectile != null; } }
 
+      const string weaponName = "Weapon";
 
       public void Spawn(Transform rightHand, Transform leftHand, Animator animator)
       {
+         DestroyOldWeapon(rightHand, leftHand);
+
          if (equippedPrefab != null)
          {
-            Instantiate(equippedPrefab, GetTransform(rightHand, leftHand));
+            Transform handTransform = GetTransform(rightHand, leftHand);
+            GameObject weapon = Instantiate(equippedPrefab, handTransform);
+            weapon.name = weaponName;
          }
          if (animatorOverride != null)
          {
             animator.runtimeAnimatorController = animatorOverride;
          }
+      }
+
+      private void DestroyOldWeapon(Transform rightHand, Transform leftHand)
+      {
+         Transform oldWeapon = rightHand.Find(weaponName);
+
+         // if old weapon isn't in right hand...
+         if (oldWeapon == null)
+         {
+            // ...check the left hand
+            oldWeapon = leftHand.Find(weaponName);
+         }
+
+         // if old weapon wasn't in left hand either, simply return ... nothing to destroy
+         if (oldWeapon == null) return;
+
+         // otherwise, destroy the old weapon
+         oldWeapon.name = "DESTROYING"; // prevent confusion with new weapon picked up
+         Destroy(oldWeapon.gameObject);
       }
 
       public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target)
