@@ -6,15 +6,25 @@ namespace RPG.Combat
    public class Projectile : MonoBehaviour
    {
       [SerializeField] float speed = 1f;
+      [SerializeField] bool isHoming = true;
+
       Health target = null;
       float damage = 0;
+
+      private void Start()
+      {
+         transform.LookAt(GetAimLocation());
+      }
 
       void Update()
       {
          if (target == null) return;
 
-         // point projectile at target
-         transform.LookAt(GetAimLocation());
+         if (isHoming && !target.IsDead)
+         {
+            // point projectile at target
+            transform.LookAt(GetAimLocation());
+         }
          
          // move the arrow toward the target by the right amount per frame
          transform.Translate(Vector3.forward * speed * Time.deltaTime);
@@ -24,7 +34,10 @@ namespace RPG.Combat
       {
          // if we hit something other than the target, just return (for now)
          if (other.GetComponent<Health>() != target) return;
-         
+
+         // if target is dead, just return
+         if (target.IsDead) return;
+
          // otherwise, apply my damage to target
          target.TakeDamage(damage);
 
