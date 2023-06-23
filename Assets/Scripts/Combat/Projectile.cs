@@ -7,6 +7,7 @@ namespace RPG.Combat
    {
       [SerializeField] float speed = 1f;
       [SerializeField] bool isHoming = true;
+      [SerializeField] GameObject hitEffect = null;
 
       Health target = null;
       float damage = 0;
@@ -30,21 +31,6 @@ namespace RPG.Combat
          transform.Translate(Vector3.forward * speed * Time.deltaTime);
       }
 
-      private void OnTriggerEnter(Collider other)
-      {
-         // if we hit something other than the target, just return (for now)
-         if (other.GetComponent<Health>() != target) return;
-
-         // if target is dead, just return
-         if (target.IsDead) return;
-
-         // otherwise, apply my damage to target
-         target.TakeDamage(damage);
-
-         // finally, destroy my (the projectile's) game object
-         Destroy(gameObject);
-      }
-
       public void SetTarget(Health target, float damage)
       {
          this.target = target;
@@ -56,6 +42,27 @@ namespace RPG.Combat
          CapsuleCollider targetCapsule = target.GetComponent<CapsuleCollider>();
          if (targetCapsule == null) return target.transform.position;
          return target.transform.position + Vector3.up * targetCapsule.height / 2;
+      }
+      
+      private void OnTriggerEnter(Collider other)
+      {
+         // if we hit something other than the target, just return (for now)
+         if (other.GetComponent<Health>() != target) return;
+
+         // if target is dead, just return
+         if (target.IsDead) return;
+
+         // otherwise, apply my damage to target
+         target.TakeDamage(damage);
+
+         // apply fireball impact effect
+         if (hitEffect != null)
+         {
+            Instantiate(hitEffect, GetAimLocation(), transform.rotation);
+         }
+
+         // finally, destroy my (the projectile's) game object
+         Destroy(gameObject);
       }
    }
 }
