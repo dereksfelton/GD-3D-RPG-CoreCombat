@@ -55,9 +55,8 @@ namespace RPG.Combat
          // otherwise, apply my damage to target
          target.TakeDamage(damage);
 
-         // apply fireball impact effect
-         if (hitEffect != null)
-         {
+         // show impact effect if defined
+         if (hitEffect != null) {
             Instantiate(hitEffect, GetAimLocation(), transform.rotation);
          }
 
