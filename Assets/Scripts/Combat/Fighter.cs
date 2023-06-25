@@ -1,16 +1,17 @@
+using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Movement;
+using RPG.Saving;
 using UnityEngine;
 
 namespace RPG.Combat
 {
-   public class Fighter : MonoBehaviour, IAction
+   public class Fighter : MonoBehaviour, IAction, IJsonSaveable
    {
       [SerializeField] float timeBetweenAttacks = 1f;
       [SerializeField] Transform rightHandTransform = null;
       [SerializeField] Transform leftHandTransform = null;
       [SerializeField] Weapon defaultWeapon = null;
-      [SerializeField] string defaultWeaponName = "Unarmed";
 
       private Health target;
       private Mover mover;
@@ -21,8 +22,10 @@ namespace RPG.Combat
       {
          mover = GetComponent<Mover>();
 
-         Weapon weapon = Resources.Load<Weapon>(defaultWeaponName);
-         EquipWeapon(weapon);
+         if (currentWeapon == null)
+         {
+            EquipWeapon(defaultWeapon);
+         }
       }
 
       private void Update()
@@ -128,6 +131,19 @@ namespace RPG.Combat
       {
          currentWeapon = weapon;
          weapon.Spawn(rightHandTransform, leftHandTransform, GetComponent<Animator>());
+      }
+
+      // Implement IJsonSaveable____________________________________________________________________
+      public JToken CaptureAsJToken()
+      {
+         return JToken.FromObject(currentWeapon.name);
+      }
+
+      public void RestoreFromJToken(JToken state)
+      {
+         print("Restoring weapon: " + state.ToObject<string>());
+         Weapon weapon = Resources.Load<Weapon>(state.ToObject<string>());
+         EquipWeapon(weapon);
       }
    }
 }

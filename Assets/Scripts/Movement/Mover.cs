@@ -82,6 +82,8 @@ namespace RPG.Movement
 
       public void RestoreFromJToken(JToken state)
       {
+         print("Restoring Mover data");
+
          MoverSaveData data = state.ToObject<MoverSaveData>();
 
          GetComponent<NavMeshAgent>().enabled = false;

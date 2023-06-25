@@ -26,6 +26,7 @@ namespace RPG.Saving
       public override JObject LoadFromFile(string saveFile)
       {
          string path = GetPathFromSaveFile(saveFile);
+         Debug.Log($"Loading from {path} ");
          if (!File.Exists(path))
          {
             return new JObject();
