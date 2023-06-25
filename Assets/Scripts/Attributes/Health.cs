@@ -1,8 +1,10 @@
 using Newtonsoft.Json.Linq;
+using RPG.Core;
 using RPG.Saving;
+using RPG.Stats; // NOTE: we'll want to remove this dependency
 using UnityEngine;
 
-namespace RPG.Core
+namespace RPG.Attributes
 {
    public class Health : MonoBehaviour, IJsonSaveable
    {
@@ -10,8 +12,17 @@ namespace RPG.Core
 
       [SerializeField] float healthPoints = 100f;
 
-      private void Awake() {
+      private void Awake()
+      {
          IsDead = false;
+      }
+
+      private void Start()
+      {
+         // Note: Sam makes the point that this might sometimes get called AFTER save is
+         //       restored, thus overwriting what we read on load. We'll fix this in a few
+         //       lectures, but we'll live with it for now.
+         healthPoints = GetComponent<BaseStats>().GetHealth();
       }
 
       public void TakeDamage(float damage)

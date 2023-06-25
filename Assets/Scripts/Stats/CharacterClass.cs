@@ -1,7 +1,7 @@
 ﻿namespace RPG.Stats
 {
    [System.Serializable]
-   enum CharacterClass
+   public enum CharacterClass
    {
       Player, 
       Grunt,
