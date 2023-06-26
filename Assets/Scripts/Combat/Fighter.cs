@@ -134,6 +134,11 @@ namespace RPG.Combat
          weapon.Spawn(rightHandTransform, leftHandTransform, GetComponent<Animator>());
       }
 
+      public Health GetTarget()
+      {
+         return target;
+      }
+
       // Implement IJsonSaveable____________________________________________________________________
       public JToken CaptureAsJToken()
       {

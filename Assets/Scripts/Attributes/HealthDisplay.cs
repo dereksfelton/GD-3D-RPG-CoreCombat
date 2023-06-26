@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPG.Attributes
 {
-   public class HealthDisplay : MonoBehaviour
+   public class EnemyHealthDisplay : MonoBehaviour
    {
       Health health;
 
