@@ -10,6 +10,9 @@ namespace RPG.Attributes
    public class Health : MonoBehaviour, IJsonSaveable
    {
       [SerializeField] float regnerationPercentage = 70;
+      
+      public float HP { get { return healthPoints; } }
+      public float MaxHP { get { return baseStats.GetStat(Stat.Health); } }
       public bool IsDead { get; private set; }
 
       private BaseStats baseStats = null;
@@ -30,12 +33,14 @@ namespace RPG.Attributes
          // only set health points here if they haven't been restored yet
          if (healthPoints < 0)
          {
-            healthPoints = GetComponent<BaseStats>().GetStat(Stat.Health);
+            healthPoints = baseStats.GetStat(Stat.Health);
          }
       }
 
       public void TakeDamage(GameObject instigator, float damage)
       {
+         print($"{gameObject.name} took damage: {damage}");
+
          healthPoints = Mathf.Max(0, healthPoints - damage);
          
          if (healthPoints == 0)
@@ -68,7 +73,7 @@ namespace RPG.Attributes
          Experience instigatorExperience = instigator.GetComponent<Experience>();
          if (instigatorExperience == null) return;
 
-         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExperienceReward));
+         instigatorExperience.GainExperience(baseStats.GetStat(Stat.ExperienceReward));
       }
 
       private void RegenerateHealth()
