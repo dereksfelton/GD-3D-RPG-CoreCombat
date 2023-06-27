@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace RPG.Stats
@@ -7,7 +8,10 @@ namespace RPG.Stats
       [Range(1, 99)]
       [SerializeField] int startingLevel;
       [SerializeField] CharacterClass characterClass;
-      [SerializeField] Progression progression;
+      [SerializeField] Progression progression = null;
+      [SerializeField] GameObject levelUpParticleEffect = null;
+
+      public event Action onLevelUp;
 
       int currentLevel = 0;
 
@@ -28,7 +32,8 @@ namespace RPG.Stats
          if (newLevel > currentLevel)
          {
             currentLevel = newLevel;
-            print("Levelled Up!");
+            LevelUpEffect();
+            onLevelUp();
          }
       }
 
@@ -75,6 +80,11 @@ namespace RPG.Stats
 
          // if we've run out of "levels to level up" values, we've hit the ULTIMATE level
          return penultimateLevel + 1;
+      }
+
+      private void LevelUpEffect()
+      {
+         Instantiate(levelUpParticleEffect, transform);
       }
    }
 }
