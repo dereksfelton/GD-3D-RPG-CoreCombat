@@ -72,8 +72,6 @@ namespace RPG.Attributes
 
       public void RestoreFromJToken(JToken state)
       {
-         print("Restoring Health data");
-
          healthPoints = state.ToObject<float>();
 
          if (healthPoints <= 0)
