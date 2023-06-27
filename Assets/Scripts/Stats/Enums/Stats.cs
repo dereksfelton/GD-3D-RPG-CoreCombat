@@ -4,7 +4,7 @@
    public enum Stat
    {
       Health,
-      ExpereinceReward,
+      ExperienceReward,
       ExperienceToLevelUp
    }
 }

@@ -639,10 +639,6 @@ PrefabInstance:
       propertyPath: defaultWeapon
       value: 
       objectReference: {fileID: 11400000, guid: 672fe85674432cc44a82bd25270cec49, type: 2}
-    - target: {fileID: 2618513439401851282, guid: 486e3bf87c64e7248abba09322679b43, type: 3}
-      propertyPath: startingLevel
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3972463969179729284, guid: 486e3bf87c64e7248abba09322679b43, type: 3}
       propertyPath: m_Name
       value: Archer-Archie
@@ -1729,6 +1725,10 @@ PrefabInstance:
       propertyPath: weaponDamage
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 2326236098415715538, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
+      propertyPath: startingLevel
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3196208375919329125, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: uniqueIdentifier
       value: c174a12b-d781-4270-a205-3c124ecbb080
@@ -2118,10 +2118,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 350298631}
     m_Modifications:
-    - target: {fileID: 2326236098415715538, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
-      propertyPath: startingLevel
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3196208375919329125, guid: 39f333b1f6b5cbb4d9d5d68faaa1ef51, type: 3}
       propertyPath: uniqueIdentifier
       value: ebf49234-96d0-43b7-a377-385f62daedd1

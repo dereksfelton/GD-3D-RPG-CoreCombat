@@ -60,7 +60,7 @@ namespace RPG.Attributes
          Experience instigatorExperience = instigator.GetComponent<Experience>();
          if (instigatorExperience == null) return;
 
-         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExpereinceReward));
+         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExperienceReward));
       }
 
 

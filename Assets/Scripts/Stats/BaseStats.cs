@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace RPG.Stats
@@ -6,17 +5,9 @@ namespace RPG.Stats
    public class BaseStats : MonoBehaviour
    {
       [Range(1, 99)]
-      [SerializeField] int startingLevel = 1;
+      [SerializeField] int startingLevel;
       [SerializeField] CharacterClass characterClass;
       [SerializeField] Progression progression;
-
-      public void Update()
-      {
-         if (gameObject.CompareTag("Player"))
-         {
-            print("Level: " + GetLevel());
-         }
-      }
 
       public float GetStat(Stat stat)
       {
