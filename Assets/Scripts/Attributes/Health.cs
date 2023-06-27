@@ -23,7 +23,7 @@ namespace RPG.Attributes
          // Note: Sam makes the point that this might sometimes get called AFTER save is
          //       restored, thus overwriting what we read on load. We'll fix this in a few
          //       lectures, but we'll live with it for now.
-         healthPoints = GetComponent<BaseStats>().GetHealth();
+         healthPoints = GetComponent<BaseStats>().GetStat(Stat.Health);
       }
 
       public void TakeDamage(GameObject instigator, float damage)
@@ -40,7 +40,7 @@ namespace RPG.Attributes
       // return what percent of my max possible health is for my level and class
       public float GetPercentage()
       {
-         return 100 * healthPoints / GetComponent<BaseStats>().GetHealth();
+         return 100 * healthPoints / GetComponent<BaseStats>().GetStat(Stat.Health);
       }
 
       private void Die()
@@ -60,7 +60,7 @@ namespace RPG.Attributes
          Experience instigatorExperience = instigator.GetComponent<Experience>();
          if (instigatorExperience == null) return;
 
-         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetExperienceReward());
+         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExpereinceReward));
       }
 
 

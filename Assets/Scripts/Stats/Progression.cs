@@ -6,14 +6,22 @@ namespace RPG.Stats
    public class Progression : ScriptableObject {
       [SerializeField] ProgressionCharacterClass[] characterClasses = null;
 
-      public float GetHealth(CharacterClass characterClass, int level)
+      public float GetStat(Stat stat, CharacterClass characterClass, int level)
       {
-         // not optimal technique, but it will do for now
+         // loop through character classes to find passed one
          foreach (ProgressionCharacterClass progClass in characterClasses)
          {
-            if (progClass.characterClass == characterClass)
+            if (progClass.characterClass != characterClass) continue;
+
+            // loop through this character class's stats to find passed one
+            foreach (ProgressionStat progressionStat in progClass.stats)
             {
-               //return progClass.health[level -1];
+               if (progressionStat.stat != stat) continue;
+
+               // guard against trying to access a stat by a level that doesn't exist
+               if (progressionStat.levels.Length < level) continue;
+
+               return progressionStat.levels[level -1];
             }
          }
          return 0;
