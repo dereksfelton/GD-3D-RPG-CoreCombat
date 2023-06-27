@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RPG.Attributes
 {
-   public class EnemyHealthDisplay : MonoBehaviour
+   public class HealthDisplay : MonoBehaviour
    {
       Health health;
 
@@ -15,7 +15,7 @@ namespace RPG.Attributes
 
       private void Update()
       {
-         GetComponent<TMP_Text>().text = String.Format("{0:0}%",health.GetPercentage());
+         GetComponent<TMP_Text>().text = String.Format("{0:0}%", health.GetPercentage());
       }
    }
 }
