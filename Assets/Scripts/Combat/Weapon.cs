@@ -64,7 +64,7 @@ namespace RPG.Combat
          Destroy(oldWeapon.gameObject);
       }
 
-      public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target)
+      public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target, GameObject instigator)
       {
          Projectile projectileInstance =
             Instantiate(
@@ -74,7 +74,7 @@ namespace RPG.Combat
             );
 
          // set where it's going
-         projectileInstance.SetTarget(target, Damage);
+         projectileInstance.SetTarget(target, instigator, Damage);
       }
 
       private Transform GetTransform(Transform rightHand, Transform leftHand)

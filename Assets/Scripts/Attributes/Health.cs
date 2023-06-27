@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Saving;
 using RPG.Stats; // NOTE: we'll want to remove this dependency
+using System;
 using UnityEngine;
 
 namespace RPG.Attributes
@@ -25,13 +26,14 @@ namespace RPG.Attributes
          healthPoints = GetComponent<BaseStats>().GetHealth();
       }
 
-      public void TakeDamage(float damage)
+      public void TakeDamage(GameObject instigator, float damage)
       {
          healthPoints = Mathf.Max(0, healthPoints - damage);
          
          if (healthPoints == 0)
          {
             Die();
+            AwardExperience(instigator);
          }
       }
 
@@ -52,6 +54,15 @@ namespace RPG.Attributes
          // cancel currently running actions
          GetComponent<ActionScheduler>().CancelCurrentAction();
       }
+
+      private void AwardExperience(GameObject instigator)
+      {
+         Experience instigatorExperience = instigator.GetComponent<Experience>();
+         if (instigatorExperience == null) return;
+
+         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetExperienceReward());
+      }
+
 
       // implement IJsonSaveable interface_________________________________________________
       public JToken CaptureAsJToken()

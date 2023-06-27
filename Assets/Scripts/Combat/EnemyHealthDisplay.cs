@@ -19,6 +19,7 @@ namespace RPG.Combat
          if (fighter.GetTarget() == null)
          {
             GetComponent<TMP_Text>().text = "N/A";
+            return;
          }
          Health health = fighter.GetTarget();
          GetComponent<TMP_Text>().text = String.Format("{0:0}%",health.GetPercentage());
