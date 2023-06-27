@@ -2,7 +2,6 @@ using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Saving;
 using RPG.Stats; // NOTE: we'll want to remove this dependency
-using System;
 using UnityEngine;
 
 namespace RPG.Attributes
@@ -11,7 +10,7 @@ namespace RPG.Attributes
    {
       public bool IsDead { get; private set; }
 
-      [SerializeField] float healthPoints = 100f;
+      float healthPoints = -1f;
 
       private void Awake()
       {
@@ -20,10 +19,11 @@ namespace RPG.Attributes
 
       private void Start()
       {
-         // Note: Sam makes the point that this might sometimes get called AFTER save is
-         //       restored, thus overwriting what we read on load. We'll fix this in a few
-         //       lectures, but we'll live with it for now.
-         healthPoints = GetComponent<BaseStats>().GetStat(Stat.Health);
+         // only set health points here if they haven't been restored yet
+         if (healthPoints < 0)
+         {
+            healthPoints = GetComponent<BaseStats>().GetStat(Stat.Health);
+         }
       }
 
       public void TakeDamage(GameObject instigator, float damage)
