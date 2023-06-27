@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Stats
@@ -6,25 +7,36 @@ namespace RPG.Stats
    public class Progression : ScriptableObject {
       [SerializeField] ProgressionCharacterClass[] characterClasses = null;
 
+      Dictionary<CharacterClass, Dictionary<Stat, float[]>> lookupTable = null;
+
       public float GetStat(Stat stat, CharacterClass characterClass, int level)
       {
-         // loop through character classes to find passed one
+         BuildLookup();
+
+         float[] levels = lookupTable[characterClass][stat];
+         return (levels.Length >= level) ? levels[level - 1] : 0;
+      }
+
+      private void BuildLookup()
+      {
+         // if we've already built it, return
+         if (lookupTable != null) return;
+
+         lookupTable = new Dictionary<CharacterClass, Dictionary<Stat, float[]>>();
+
+         // loop through all progression character classes
          foreach (ProgressionCharacterClass progClass in characterClasses)
          {
-            if (progClass.characterClass != characterClass) continue;
+            var statLookupTable = new Dictionary<Stat, float[]>();
 
-            // loop through this character class's stats to find passed one
-            foreach (ProgressionStat progressionStat in progClass.stats)
+            // loop through all progression stats
+            foreach (ProgressionStat progStat in progClass.stats)
             {
-               if (progressionStat.stat != stat) continue;
-
-               // guard against trying to access a stat by a level that doesn't exist
-               if (progressionStat.levels.Length < level) continue;
-
-               return progressionStat.levels[level -1];
+               statLookupTable[progStat.stat] = progStat.levels;
             }
+
+            lookupTable[progClass.characterClass] = statLookupTable;
          }
-         return 0;
       }
    }
 
