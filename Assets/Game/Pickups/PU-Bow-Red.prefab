@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Simple Bow
       objectReference: {fileID: 0}
+    - target: {fileID: 1563655986059756, guid: 7f105c0c272e6c146b4b41cdc53ea356, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4281075886339594, guid: 7f105c0c272e6c146b4b41cdc53ea356, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -108,7 +112,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 672fe85674432cc44a82bd25270cec49, type: 2}
     - target: {fileID: 4635498068327200522, guid: d5c027bd4799c50439ecaa4d004cb445, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4635498068327200522, guid: d5c027bd4799c50439ecaa4d004cb445, type: 3}
       propertyPath: m_LocalPosition.x

@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Wep_Sword_01
       objectReference: {fileID: 0}
+    - target: {fileID: 181534, guid: 13af847dfa6dbe844ba4b7c902f98f67, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 489998, guid: 13af847dfa6dbe844ba4b7c902f98f67, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -96,7 +100,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1144028229013174678, guid: d5c027bd4799c50439ecaa4d004cb445, type: 3}
       propertyPath: m_Name
-      value: Pickup-Sword
+      value: PU-Sword
       objectReference: {fileID: 0}
     - target: {fileID: 1906966323684045676, guid: d5c027bd4799c50439ecaa4d004cb445, type: 3}
       propertyPath: weapon
@@ -104,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 37e097baae0efad47bbab03a2287ecf4, type: 2}
     - target: {fileID: 4635498068327200522, guid: d5c027bd4799c50439ecaa4d004cb445, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4635498068327200522, guid: d5c027bd4799c50439ecaa4d004cb445, type: 3}
       propertyPath: m_LocalPosition.x
