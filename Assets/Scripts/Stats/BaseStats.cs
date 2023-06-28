@@ -1,3 +1,4 @@
+using GameDevTV.Utils;
 using System;
 using UnityEngine;
 
@@ -12,22 +13,27 @@ namespace RPG.Stats
       [SerializeField] GameObject levelUpParticleEffect = null;
       [SerializeField] bool shouldUseModifiers = false;
 
+      public int Level
+      {
+         get { return currentLevel.value; }
+         set { currentLevel.value = value; }
+      }
+
       public event Action onLevelUp;
 
-      int currentLevel = 0;
+      LazyValue<int> currentLevel;
 
       Experience experience;
 
       private void Awake()
       {
          experience = GetComponent<Experience>();
+         currentLevel = new LazyValue<int>(CalculateLevel);
       }
 
       private void Start()
       {
-         // NOTE: we can't move this call to Awake, because CalculateLevel
-         // relies on state that might not be set up yet via other Awakes.
-         currentLevel = CalculateLevel();
+         currentLevel.ForceInit();
       }
 
       private void OnEnable()
@@ -46,15 +52,6 @@ namespace RPG.Stats
          }
       }
 
-      public int GetLevel()
-      {
-         if (currentLevel < 1)
-         {
-            currentLevel = CalculateLevel();
-         }
-         return currentLevel;
-      }
-
       public float GetStat(Stat stat)
       {
          return (GetBaseStat(stat) + GetAdditiveModifier(stat)) * (1 + GetPercentageModifier(stat) / 100);
@@ -62,7 +59,7 @@ namespace RPG.Stats
 
       private float GetBaseStat(Stat stat)
       {
-         return progression.GetStat(stat, characterClass, GetLevel());
+         return progression.GetStat(stat, characterClass, Level);
       }
 
       private float GetAdditiveModifier(Stat stat)
@@ -108,9 +105,9 @@ namespace RPG.Stats
       private void UpdateLevel()
       {
          int newLevel = CalculateLevel();
-         if (newLevel > currentLevel)
+         if (newLevel > Level)
          {
-            currentLevel = newLevel;
+            Level = newLevel;
             LevelUpEffect();
             onLevelUp();
          }

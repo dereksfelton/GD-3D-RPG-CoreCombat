@@ -1,9 +1,11 @@
+using GameDevTV.Utils;
 using Newtonsoft.Json.Linq;
 using RPG.Attributes;
 using RPG.Core;
 using RPG.Movement;
 using RPG.Saving;
 using RPG.Stats;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,24 +18,37 @@ namespace RPG.Combat
       [SerializeField] Transform leftHandTransform = null;
       [SerializeField] Weapon defaultWeapon = null;
 
-      private Health target;
-      private Mover mover;
-      private BaseStats baseStats;
-      private float timeSinceLastAttack = Mathf.Infinity;
-      private Weapon currentWeapon = null;
+      private Weapon CurrentWeapon
+      {
+         get { return currentWeapon.value; }
+         set { currentWeapon.value = value; }
+      }
+
+      // cached references
+      Mover mover;
+      BaseStats baseStats;
+
+      Health target;
+      float timeSinceLastAttack = Mathf.Infinity;
+      LazyValue<Weapon> currentWeapon;
 
       private void Awake()
       {
          mover = GetComponent<Mover>();
          baseStats = GetComponent<BaseStats>();
+
+         currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
+      }
+
+      private Weapon SetupDefaultWeapon()
+      {
+         EquipWeapon(defaultWeapon);
+         return defaultWeapon;
       }
 
       private void Start()
       {
-         if (currentWeapon == null)
-         {
-            EquipWeapon(defaultWeapon);
-         }
+         currentWeapon.ForceInit();
       }
 
       private void Update()
@@ -95,9 +110,9 @@ namespace RPG.Combat
 
          float damage = baseStats.GetStat(Stat.Damage);
 
-         if (currentWeapon.HasProjectile)
+         if (CurrentWeapon.HasProjectile)
          {
-            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target, gameObject, damage);
+            CurrentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target, gameObject, damage);
          }
          else
          {
@@ -107,7 +122,7 @@ namespace RPG.Combat
 
       private bool TargetIsInRange()
       {
-         return Vector3.Distance(transform.position, target.transform.position) <= currentWeapon.Range;
+         return Vector3.Distance(transform.position, target.transform.position) <= CurrentWeapon.Range;
       }
 
       public bool CanAttack(GameObject combatTarget)
@@ -139,7 +154,7 @@ namespace RPG.Combat
 
       public void EquipWeapon(Weapon weapon)
       {
-         currentWeapon = weapon;
+         CurrentWeapon = weapon;
          weapon.Spawn(rightHandTransform, leftHandTransform, GetComponent<Animator>());
       }
 
@@ -151,7 +166,7 @@ namespace RPG.Combat
       // Implement IJsonSaveable____________________________________________________________________
       public JToken CaptureAsJToken()
       {
-         return JToken.FromObject(currentWeapon.name);
+         return JToken.FromObject(CurrentWeapon.name);
       }
 
       public void RestoreFromJToken(JToken state)
@@ -168,7 +183,7 @@ namespace RPG.Combat
          {
             // note we could yield return more than one value here, such as damage from a off-handed
             // weapon, since our return type is IEnumerable
-            yield return currentWeapon.Damage;
+            yield return CurrentWeapon.Damage;
          }
       }
 
@@ -176,7 +191,7 @@ namespace RPG.Combat
       {
          if (stat == Stat.Damage)
          {
-            yield return currentWeapon.PercentageBonus;
+            yield return CurrentWeapon.PercentageBonus;
          }
       }
    }

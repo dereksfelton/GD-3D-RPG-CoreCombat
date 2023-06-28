@@ -1,4 +1,5 @@
 using System;
+using GameDevTV.Utils;
 using RPG.Attributes;
 using RPG.Combat;
 using RPG.Core;
@@ -16,8 +17,12 @@ namespace RPG.Control
 
       [Range(0, 1)]
       [SerializeField] float patrolSpeedFraction = 0.2f; // as a percentage of Mover.maxSpeed
-
       [SerializeField] PatrolPath patrolPath;
+
+      private Vector3 GuardPosition {
+         get { return guardPosition.value; }
+         set { guardPosition.value = value; }
+      }
 
       // cached references
       Fighter fighter;
@@ -25,7 +30,7 @@ namespace RPG.Control
       Mover mover;
       GameObject player;
 
-      Vector3 guardPosition;
+      LazyValue<Vector3> guardPosition;
       float timeSinceLastSawPlayer = Mathf.Infinity;
       float timeSinceArrivedAtWaypoint = Mathf.Infinity; // in seconds
       int currentWaypointIndex = 0; // note irrelevant if a PatrolPath isn't assigned
@@ -36,12 +41,18 @@ namespace RPG.Control
          health = GetComponent<Health>();
          mover = GetComponent<Mover>();
          player = GameObject.FindWithTag("Player");
+
+         guardPosition = new LazyValue<Vector3>(GetGuardPosition);
       }
-      
+
       private void Start()
       {
-         // set my guard location as my startup position
-         guardPosition = transform.position;
+         guardPosition.ForceInit();
+      }
+
+      private Vector3 GetGuardPosition()
+      {
+         return transform.position;
       }
 
       private void Update()
@@ -86,7 +97,7 @@ namespace RPG.Control
 
       private void PatrolBehavior()
       {
-         Vector3 nextPosition = guardPosition; // default when no patrol path is assigned
+         Vector3 nextPosition = GuardPosition; // default when no patrol path is assigned
 
          if (patrolPath != null)
          {

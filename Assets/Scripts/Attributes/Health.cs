@@ -1,3 +1,4 @@
+using GameDevTV.Utils;
 using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Saving;
@@ -10,46 +11,50 @@ namespace RPG.Attributes
    {
       [SerializeField] float regnerationPercentage = 70;
       
-      public float HP { get { return healthPoints; } }
-      public float MaxHP { get { return baseStats.GetStat(Stat.Health); } }
+      public float HP {
+         get { return healthPoints.value; }
+         set { healthPoints.value = value; }
+      }
+      public float MaxHP { get { return GetComponent<BaseStats>().GetStat(Stat.Health); } }
       public bool IsDead { get; private set; }
 
-      private BaseStats baseStats = null;
-      private float healthPoints = -1f;
-
+      LazyValue<float> healthPoints;
 
       private void Awake()
       {
-         baseStats = GetComponent<BaseStats>();
          IsDead = false;
+
+         // assign the delegate to be called when we fist need to access health points
+         healthPoints = new LazyValue<float>(GetInitialHealth);
+      }
+
+      private float GetInitialHealth()
+      {
+         return GetComponent<BaseStats>().GetStat(Stat.Health);
       }
 
       private void Start()
       {
-         // only set health points here if they haven't been restored yet
-         if (healthPoints < 0)
-         {
-            healthPoints = baseStats.GetStat(Stat.Health);
-         }
+         healthPoints.ForceInit();
       }
 
       private void OnEnable()
       {
-         baseStats.onLevelUp += RegenerateHealth;
+         GetComponent<BaseStats>().onLevelUp += RegenerateHealth;
       }
 
       private void OnDisable()
       {
-         baseStats.onLevelUp -= RegenerateHealth;
+         GetComponent<BaseStats>().onLevelUp -= RegenerateHealth;
       }
 
       public void TakeDamage(GameObject instigator, float damage)
       {
          print($"{gameObject.name} took damage: {damage}");
 
-         healthPoints = Mathf.Max(0, healthPoints - damage);
+         HP = Mathf.Max(0, HP - damage);
          
-         if (healthPoints == 0)
+         if (HP == 0)
          {
             Die();
             AwardExperience(instigator);
@@ -59,7 +64,7 @@ namespace RPG.Attributes
       // return what percent of my max possible health is for my level and class
       public float GetPercentage()
       {
-         return 100 * healthPoints / GetComponent<BaseStats>().GetStat(Stat.Health);
+         return 100 * HP / GetComponent<BaseStats>().GetStat(Stat.Health);
       }
 
       private void Die()
@@ -79,15 +84,15 @@ namespace RPG.Attributes
          Experience instigatorExperience = instigator.GetComponent<Experience>();
          if (instigatorExperience == null) return;
 
-         instigatorExperience.GainExperience(baseStats.GetStat(Stat.ExperienceReward));
+         instigatorExperience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExperienceReward));
       }
 
       private void RegenerateHealth()
       {
          // regenerate to the HIGHER of regen percentage at our current level's max HP, or our current HP
          // i.e., don't penalize if they're already above this percentager of the new level's HP
-         float regenHealthPoints = baseStats.GetStat(Stat.Health) * (regnerationPercentage / 100);
-         healthPoints = Mathf.Max(healthPoints, regenHealthPoints);
+         float regenHealthPoints = GetComponent<BaseStats>().GetStat(Stat.Health) * (regnerationPercentage / 100);
+         HP = Mathf.Max(HP, regenHealthPoints);
       }
 
       // implement IJsonSaveable interface_________________________________________________
@@ -98,9 +103,9 @@ namespace RPG.Attributes
 
       public void RestoreFromJToken(JToken state)
       {
-         healthPoints = state.ToObject<float>();
+         HP = state.ToObject<float>();
 
-         if (healthPoints <= 0)
+         if (HP <= 0)
          {
             Die();
          }

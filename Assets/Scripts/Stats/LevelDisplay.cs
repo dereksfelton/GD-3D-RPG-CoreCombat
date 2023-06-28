@@ -14,7 +14,7 @@ namespace RPG.Stats
 
       private void Update()
       {
-         GetComponent<TMP_Text>().text = baseStats.GetLevel().ToString();
+         GetComponent<TMP_Text>().text = baseStats.Level.ToString();
       }
    }
 }
