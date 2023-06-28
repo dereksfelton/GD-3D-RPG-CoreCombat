@@ -4,11 +4,12 @@ using RPG.Core;
 using RPG.Movement;
 using RPG.Saving;
 using RPG.Stats;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPG.Combat
 {
-   public class Fighter : MonoBehaviour, IAction, IJsonSaveable
+   public class Fighter : MonoBehaviour, IAction, IJsonSaveable, IModifierProvider
    {
       [SerializeField] float timeBetweenAttacks = 1f;
       [SerializeField] Transform rightHandTransform = null;
@@ -155,6 +156,17 @@ namespace RPG.Combat
          print("Restoring weapon: " + state.ToObject<string>());
          Weapon weapon = Resources.Load<Weapon>(state.ToObject<string>());
          EquipWeapon(weapon);
+      }
+
+      // Implement IModifierProvider____________________________________________________________________
+      public IEnumerable<float> GetAdditiveModifier(Stat stat)
+      {
+         if (stat == Stat.Damage)
+         {
+            // note we could yield return more than one value here, such as damage from a off-handed
+            // weapon, since our return type is IEnumerable
+            yield return currentWeapon.Damage;
+         }
       }
    }
 }
