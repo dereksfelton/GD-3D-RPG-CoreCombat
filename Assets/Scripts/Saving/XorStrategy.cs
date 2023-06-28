@@ -47,7 +47,7 @@ namespace RPG.Saving
             return new JObject();
          }
 
-         Debug.Log($"Loading from {path} ");
+         Debug.Log($"Loading from {path}");
 
          using (var textReader = File.OpenText(path))
          {
