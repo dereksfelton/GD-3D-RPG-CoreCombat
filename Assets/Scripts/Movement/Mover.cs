@@ -20,10 +20,6 @@ namespace RPG.Movement
          health = GetComponent<Health>();
       }
 
-      private void Start()
-      {
-      }
-
       void Update()
       {
          // disable the nav mesh agent if I'm dead

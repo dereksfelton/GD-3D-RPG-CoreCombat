@@ -13,7 +13,7 @@ namespace RPG.Control
       [SerializeField] float suspicionDuration = 5f; // in seconds
       [SerializeField] float waypointDistanceTolerance = 1f; // in meters
       [SerializeField] float waypointDwellTime = 3f; // in seconds
-      
+
       [Range(0, 1)]
       [SerializeField] float patrolSpeedFraction = 0.2f; // as a percentage of Mover.maxSpeed
 
@@ -30,12 +30,16 @@ namespace RPG.Control
       float timeSinceArrivedAtWaypoint = Mathf.Infinity; // in seconds
       int currentWaypointIndex = 0; // note irrelevant if a PatrolPath isn't assigned
 
-      private void Start() {
+      private void Awake()
+      {
          fighter = GetComponent<Fighter>();
          health = GetComponent<Health>();
          mover = GetComponent<Mover>();
          player = GameObject.FindWithTag("Player");
-
+      }
+      
+      private void Start()
+      {
          // set my guard location as my startup position
          guardPosition = transform.position;
       }
@@ -123,7 +127,8 @@ namespace RPG.Control
       }
 
       // called by Unity...
-      private void OnDrawGizmosSelected() {
+      private void OnDrawGizmosSelected()
+      {
          Gizmos.color = Color.blue;
          Gizmos.DrawWireSphere(transform.position, chaseDistance);
       }

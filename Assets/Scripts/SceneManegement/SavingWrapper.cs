@@ -17,11 +17,13 @@ namespace RPG.SceneManagement
 
       private IEnumerator LoadLastScene()
       {
-         Fader fader = FindFirstObjectByType<Fader>();
-         fader.FadeOutImmediate();
-         
+         // load the last scene ... this ensures that all Awakes have 
+         // been called before making calls to Fader.
          yield return GetComponent<JsonSavingSystem>().LoadLastScene(defaultSaveFile);
 
+         // fade out, then fade in
+         Fader fader = FindFirstObjectByType<Fader>();
+         fader.FadeOutImmediate();
          yield return fader.FadeIn(fadeInDuration);
       }
 

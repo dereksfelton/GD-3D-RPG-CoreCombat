@@ -2,7 +2,6 @@ using Newtonsoft.Json.Linq;
 using RPG.Core;
 using RPG.Saving;
 using RPG.Stats; // NOTE: we'll want to remove this dependency
-using System;
 using UnityEngine;
 
 namespace RPG.Attributes
@@ -27,14 +26,21 @@ namespace RPG.Attributes
 
       private void Start()
       {
-         // subscribe to the onLevelUp event
-         baseStats.onLevelUp += RegenerateHealth;
-
          // only set health points here if they haven't been restored yet
          if (healthPoints < 0)
          {
             healthPoints = baseStats.GetStat(Stat.Health);
          }
+      }
+
+      private void OnEnable()
+      {
+         baseStats.onLevelUp += RegenerateHealth;
+      }
+
+      private void OnDisable()
+      {
+         baseStats.onLevelUp -= RegenerateHealth;
       }
 
       public void TakeDamage(GameObject instigator, float damage)
