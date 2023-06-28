@@ -2,8 +2,10 @@ using System.Collections.Generic;
 
 namespace RPG.Stats
 {
-    interface IModifierProvider
-    {
-        IEnumerable<float> GetAdditiveModifier(Stat stat);
-    }
+   interface IModifierProvider
+   {
+      IEnumerable<float> GetAdditiveModifiers(Stat stat);
+
+      IEnumerable<float> GetPercentageModifiers(Stat stat);
+   }
 }

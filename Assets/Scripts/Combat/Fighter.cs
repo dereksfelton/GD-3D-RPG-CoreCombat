@@ -159,13 +159,21 @@ namespace RPG.Combat
       }
 
       // Implement IModifierProvider____________________________________________________________________
-      public IEnumerable<float> GetAdditiveModifier(Stat stat)
+      public IEnumerable<float> GetAdditiveModifiers(Stat stat)
       {
          if (stat == Stat.Damage)
          {
             // note we could yield return more than one value here, such as damage from a off-handed
             // weapon, since our return type is IEnumerable
             yield return currentWeapon.Damage;
+         }
+      }
+
+      public IEnumerable<float> GetPercentageModifiers(Stat stat)
+      {
+         if (stat == Stat.Damage)
+         {
+            yield return currentWeapon.PercentageBonus;
          }
       }
    }
