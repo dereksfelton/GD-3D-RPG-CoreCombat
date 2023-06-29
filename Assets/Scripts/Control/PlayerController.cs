@@ -3,6 +3,7 @@ using RPG.Movement;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 namespace RPG.Control
@@ -20,7 +21,8 @@ namespace RPG.Control
       }
 
       [SerializeField] CursorMapping[] cursorMappings = null;
-
+      [SerializeField] float maxNavMeshProjectionDistance = 1.0f;
+      
       // cached cursor mapping optimization credit: Brandon Anderson,
       // https://community.gamedev.tv/t/cursor-flicker-and-fps-bug-fix/172245
       private CursorMapping _cachedCursorMapping; 
@@ -84,14 +86,14 @@ namespace RPG.Control
 
       private bool InteractWithMovement()
       {
-         RaycastHit hit;
-         bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+         Vector3 target;
+         bool hasHit = RaycastNavMesh(out target);
 
          if (hasHit)
          {
             if (Input.GetMouseButton(0))
             {
-               GetComponent<Mover>().StartMoveAction(hit.point, 1f);
+               GetComponent<Mover>().StartMoveAction(target, 1f);
             }
 
             // set cursor to custom Movement cursor
@@ -102,6 +104,31 @@ namespace RPG.Control
             return true;
          }
          return false;
+      }
+
+      private bool RaycastNavMesh(out Vector3 target)
+      {
+         // init target to dummy in case of early exit
+         target = Vector3.zero;
+
+         // raycast to terrain
+         RaycastHit hit;
+         bool hasHit = Physics.Raycast(GetMouseRay(), out hit);
+
+         // if we didn't hit terrain, simply return false
+         if (!hasHit) return false;
+
+         // otherwise, find nearest navmesh point
+         NavMeshHit navMeshHit;
+         bool hasCastToNavMesh = NavMesh.SamplePosition(hit.point, 
+                                                         out navMeshHit, 
+                                                         maxNavMeshProjectionDistance, 
+                                                         NavMesh.AllAreas);
+         if (!hasCastToNavMesh) return false;
+
+         // set target and return true if we found a nearby navmesh point
+         target = navMeshHit.position;
+         return true;
       }
 
       private void SetCursor(CursorType type)
