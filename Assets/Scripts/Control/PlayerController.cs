@@ -4,6 +4,7 @@ using RPG.Movement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.LowLevel;
 
 namespace RPG.Control
@@ -16,7 +17,8 @@ namespace RPG.Control
       {
          None,
          Movement,
-         Combat
+         Combat,
+         UI
       }
 
       [System.Serializable]
@@ -35,12 +37,27 @@ namespace RPG.Control
 
       void Update()
       {
-         if (health.IsDead) return; // don't do ANYTHING if you're dead!
-         
+         if (InteractWithUI()) return;
+         if (health.IsDead)
+         {
+            SetCursor(CursorType.None);
+            return;
+         }
          if (InteractWithCombat()) return;
          if (InteractWithMovement()) return;
 
          SetCursor(CursorType.None);
+      }
+
+      private bool InteractWithUI()
+      {
+         // returns t/f based on whether we're hovering over UI
+         bool overUI = EventSystem.current.IsPointerOverGameObject();
+         if (overUI)
+         {
+            SetCursor(CursorType.UI);
+         }
+         return overUI;
       }
 
       private bool InteractWithCombat()
