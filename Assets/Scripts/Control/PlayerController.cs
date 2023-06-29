@@ -43,10 +43,36 @@ namespace RPG.Control
             SetCursor(CursorType.None);
             return;
          }
-         if (InteractWithCombat()) return;
+         if (InteractWithComponent()) return; // raycastables
+         //if (InteractWithCombat()) return;
          if (InteractWithMovement()) return;
 
          SetCursor(CursorType.None);
+      }
+
+      private bool InteractWithComponent()
+      {
+         // raycast through world, get all hits
+         RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
+         
+         // cycle through hit game objects
+         foreach (RaycastHit hit in hits)
+         {
+            // get all IRaycastable components in this game object
+            IRaycastable[] raycastables = hit.transform.GetComponents<IRaycastable>();
+
+            // cycle through raycastable components
+            foreach(IRaycastable raycastable in raycastables)
+            {
+               if (raycastable.HandleRaycast(this)) 
+               {
+                  SetCursor(CursorType.Combat); // just for now to show that we handled this raycast
+                  return true;
+               }
+            }
+         }
+         // if nothing was hit, or if nothing handled the raycast, return false
+         return false;
       }
 
       private bool InteractWithUI()
@@ -58,33 +84,6 @@ namespace RPG.Control
             SetCursor(CursorType.UI);
          }
          return overUI;
-      }
-
-      private bool InteractWithCombat()
-      {
-         RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
-         foreach (RaycastHit hit in hits)
-         {
-            // see if this hit is a CombatTarget that isn't dead
-            CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-            if (target == null) continue;
-
-            if (!GetComponent<Fighter>().CanAttack(target.gameObject)) continue;
-
-            // if so, and if we clicked the left mouse button...
-            if (Input.GetMouseButtonDown(0))
-            {
-               GetComponent<Fighter>().Attack(target.gameObject);
-            }
-
-            // set cursor to custom Combat cursor
-            SetCursor(CursorType.Combat);
-
-            // return that we DID interact with combat,
-            // even if we just hovered over a combat target
-            return true;
-         }
-         return false;
       }
 
       private bool InteractWithMovement()
