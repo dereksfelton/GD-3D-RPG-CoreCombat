@@ -1,5 +1,7 @@
 using RPG.Attributes;
 using RPG.Movement;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -19,8 +21,15 @@ namespace RPG.Control
 
       [SerializeField] CursorMapping[] cursorMappings = null;
 
+      // cached cursor mapping optimization credit: Brandon Anderson,
+      // https://community.gamedev.tv/t/cursor-flicker-and-fps-bug-fix/172245
+      private CursorMapping _cachedCursorMapping; 
+
+      private BufferedRaycast bufferedRaycaster;
+
       private void Awake() {
          health = GetComponent<Health>();
+         bufferedRaycaster = new BufferedRaycast(10);
       }
 
       void Update()
@@ -39,9 +48,9 @@ namespace RPG.Control
 
       private bool InteractWithComponent()
       {
-         // raycast through world, get all hits
-         RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
-         
+         // raycast through world, get all hits sorted by distance
+         IEnumerable<RaycastHit> hits = bufferedRaycaster.Raycast(GetMouseRay(), true);
+
          // cycle through hit game objects
          foreach (RaycastHit hit in hits)
          {
@@ -49,9 +58,9 @@ namespace RPG.Control
             IRaycastable[] raycastables = hit.transform.GetComponents<IRaycastable>();
 
             // cycle through raycastable components
-            foreach(IRaycastable raycastable in raycastables)
+            foreach (IRaycastable raycastable in raycastables)
             {
-               if (raycastable.HandleRaycast(this)) 
+               if (raycastable.HandleRaycast(this))
                {
                   SetCursor(raycastable.GetCursorType());
                   return true;
@@ -97,8 +106,9 @@ namespace RPG.Control
 
       private void SetCursor(CursorType type)
       {
-         CursorMapping mapping = GetCursorMapping(type);
-         Cursor.SetCursor(mapping.texture, mapping.hotspot, CursorMode.Auto);
+         if (_cachedCursorMapping.type == type) return;
+         _cachedCursorMapping = GetCursorMapping(type);
+         Cursor.SetCursor(_cachedCursorMapping.texture, _cachedCursorMapping.hotspot, CursorMode.Auto);
       }
 
       private CursorMapping GetCursorMapping(CursorType type)
