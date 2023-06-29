@@ -1,25 +1,13 @@
 using RPG.Attributes;
-using RPG.Combat;
 using RPG.Movement;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace RPG.Control
 {
    public class PlayerController : MonoBehaviour
    {
       Health health;
-
-      enum CursorType
-      {
-         None,
-         Movement,
-         Combat,
-         UI
-      }
 
       [System.Serializable]
       struct CursorMapping
@@ -44,7 +32,6 @@ namespace RPG.Control
             return;
          }
          if (InteractWithComponent()) return; // raycastables
-         //if (InteractWithCombat()) return;
          if (InteractWithMovement()) return;
 
          SetCursor(CursorType.None);
@@ -66,7 +53,7 @@ namespace RPG.Control
             {
                if (raycastable.HandleRaycast(this)) 
                {
-                  SetCursor(CursorType.Combat); // just for now to show that we handled this raycast
+                  SetCursor(raycastable.GetCursorType());
                   return true;
                }
             }

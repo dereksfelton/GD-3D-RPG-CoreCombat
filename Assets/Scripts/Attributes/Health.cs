@@ -98,7 +98,7 @@ namespace RPG.Attributes
       // implement IJsonSaveable interface_________________________________________________
       public JToken CaptureAsJToken()
       {
-         return JToken.FromObject(healthPoints);
+         return JToken.FromObject(HP);
       }
 
       public void RestoreFromJToken(JToken state)
