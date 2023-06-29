@@ -4,13 +4,15 @@ using RPG.Core;
 using RPG.Saving;
 using RPG.Stats; // NOTE: we'll want to remove this dependency
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace RPG.Attributes
 {
    public class Health : MonoBehaviour, IJsonSaveable
    {
       [SerializeField] float regnerationPercentage = 70;
-      
+      [SerializeField] UnityEvent takeDamage;
+
       public float HP {
          get { return healthPoints.value; }
          set { healthPoints.value = value; }
@@ -50,14 +52,16 @@ namespace RPG.Attributes
 
       public void TakeDamage(GameObject instigator, float damage)
       {
-         print($"{gameObject.name} took damage: {damage}");
-
          HP = Mathf.Max(0, HP - damage);
-         
+
          if (HP == 0)
          {
             Die();
             AwardExperience(instigator);
+         }
+         else
+         {
+            takeDamage.Invoke();
          }
       }
 
