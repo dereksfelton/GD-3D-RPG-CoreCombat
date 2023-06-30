@@ -34,8 +34,9 @@ namespace Scripts.Attributes
          // set health bar to this percentage
          healthBarImage.transform.localScale = _scalingVector;
          
-         // deactivate the bar if I'm dead
-         if (_scalingVector.x <= 0)
+         // deactivate the bar if I'm dead, OR at full health
+         // ...this allows for the possibility of enemies gettign fully healed
+         if (Mathf.Approximately(_scalingVector.x, 0) || Mathf.Approximately(_scalingVector.x, 1))
          {
             DeactivateHealthBar();
          }
