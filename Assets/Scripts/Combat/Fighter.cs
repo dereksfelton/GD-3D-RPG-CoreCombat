@@ -16,9 +16,9 @@ namespace RPG.Combat
       [SerializeField] float timeBetweenAttacks = 1f;
       [SerializeField] Transform rightHandTransform = null;
       [SerializeField] Transform leftHandTransform = null;
-      [SerializeField] Weapon defaultWeapon = null;
+      [SerializeField] WeaponConfig defaultWeapon = null;
 
-      private Weapon CurrentWeapon
+      private WeaponConfig CurrentWeapon
       {
          get { return currentWeapon.value; }
          set { currentWeapon.value = value; }
@@ -30,17 +30,17 @@ namespace RPG.Combat
 
       Health target;
       float timeSinceLastAttack = Mathf.Infinity;
-      LazyValue<Weapon> currentWeapon;
+      LazyValue<WeaponConfig> currentWeapon;
 
       private void Awake()
       {
          mover = GetComponent<Mover>();
          baseStats = GetComponent<BaseStats>();
 
-         currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
+         currentWeapon = new LazyValue<WeaponConfig>(SetupDefaultWeapon);
       }
 
-      private Weapon SetupDefaultWeapon()
+      private WeaponConfig SetupDefaultWeapon()
       {
          EquipWeapon(defaultWeapon);
          return defaultWeapon;
@@ -152,7 +152,7 @@ namespace RPG.Combat
          target = null;
       }
 
-      public void EquipWeapon(Weapon weapon)
+      public void EquipWeapon(WeaponConfig weapon)
       {
          CurrentWeapon = weapon;
          weapon.Spawn(rightHandTransform, leftHandTransform, GetComponent<Animator>());
@@ -172,7 +172,7 @@ namespace RPG.Combat
       public void RestoreFromJToken(JToken state)
       {
          print("Restoring weapon: " + state.ToObject<string>());
-         Weapon weapon = Resources.Load<Weapon>(state.ToObject<string>());
+         WeaponConfig weapon = Resources.Load<WeaponConfig>(state.ToObject<string>());
          EquipWeapon(weapon);
       }
 
