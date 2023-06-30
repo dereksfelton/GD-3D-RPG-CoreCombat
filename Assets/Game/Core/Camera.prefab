@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7691440922924545653}
   - component: {fileID: 3255798898869149142}
-  - component: {fileID: 8263908035365836568}
   - component: {fileID: 4258472409875067040}
   m_Layer: 0
   m_Name: Camera
@@ -26,13 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241761513854769298}
-  m_LocalRotation: {x: -0.042624522, y: 0.906926, z: -0.4082942, w: -0.094679974}
-  m_LocalPosition: {x: 27.93929, y: 8.486566, z: 44.556633}
+  m_LocalRotation: {x: 0.022499278, y: -0.9710182, z: 0.21526702, w: 0.10137852}
+  m_LocalPosition: {x: 29.204386, y: 5.22618, z: 46.812958}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 258406180328733452}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 46.793, y: 193.381, z: 9.837}
 --- !u!20 &3255798898869149142
 Camera:
@@ -85,14 +85,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &8263908035365836568
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241761513854769298}
-  m_Enabled: 1
 --- !u!114 &4258472409875067040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,3 +119,43 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &3250921933872629346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 258406180328733452}
+  - component: {fileID: 3131411018457737753}
+  m_Layer: 0
+  m_Name: MicBoom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &258406180328733452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3250921933872629346}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.677, z: 9.663}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7691440922924545653}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &3131411018457737753
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3250921933872629346}
+  m_Enabled: 1
