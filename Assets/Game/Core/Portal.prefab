@@ -131,5 +131,5 @@ MonoBehaviour:
   destinationPortalId: 0
   spawnPoint: {fileID: 2089651654030567572}
   fadeOutDuration: 0.5
-  fadeInDuration: 1
+  fadeInDuration: 2
   waitWhileFadedDuration: 0.5

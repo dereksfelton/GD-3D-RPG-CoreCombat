@@ -1,3 +1,4 @@
+using RPG.Control;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -65,12 +66,19 @@ namespace RPG.SceneManagement
          // determine whether we're moving to a new map
          bool movingToNewMap = sceneBuildIndex != destMapIndex;
 
-         // get reference to Fader & fade out
+         // get references to Fader & saving wrapper
          Fader fader = FindObjectOfType<Fader>();
-         yield return fader.FadeOut(fadeOutDuration);
-
-         // get a reference to the saving wrapper
          SavingWrapper savingWrapper = FindFirstObjectByType<SavingWrapper>();
+
+         // store a local reference to Player's PlayerController component
+         PlayerController playerController = 
+            GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+         // remove control from player in "old" map
+         playerController.enabled = false;
+
+         // fade out
+         yield return fader.FadeOut(fadeOutDuration);
 
          //only load new scene if we're moving to a new map
          if (movingToNewMap)
@@ -85,6 +93,12 @@ namespace RPG.SceneManagement
             AsyncOperation loadingScene = SceneManager.LoadSceneAsync(destMapIndex);
             while (!loadingScene.isDone) yield return null;
 
+            // remove control from player in "new" map.
+            // ... note we have to re-find the player & controller,
+            //     since it's a new player in the new map
+            playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+            playerController.enabled = false;
+
             // load state of scene we're entering
             savingWrapper.Load();
          }
@@ -98,9 +112,14 @@ namespace RPG.SceneManagement
          // save again now that player is in new scene
          savingWrapper.Save();
 
-         // wait while faded out (to let camera to settle, etc.), then fade in
+         // wait while faded out (to let camera to settle, etc.)
          yield return new WaitForSeconds(waitWhileFadedDuration);
-         yield return fader.FadeIn(fadeInDuration);
+         
+         // fade in ... note that we can 
+         fader.FadeIn(fadeInDuration);
+
+         // restore control to player
+         playerController.enabled = true;
 
          // finally destroy this portal object, but only if we've moved to a new map
          if (movingToNewMap) Destroy(gameObject);
