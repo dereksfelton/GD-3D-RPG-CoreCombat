@@ -65,10 +65,16 @@ namespace RPG.Attributes
          }
       }
 
-      // return what percent of my max possible health is for my level and class
+      // return percent (0-100) of my max possible health is for my level and class
       public float GetPercentage()
       {
-         return 100 * HP / GetComponent<BaseStats>().GetStat(Stat.Health);
+         return 100 * GetFraction();
+      }
+
+      // return decimal (0-1) of my max possible health is for my level and class
+      public float GetFraction()
+      {
+         return HP / GetComponent<BaseStats>().GetStat(Stat.Health);
       }
 
       private void Die()
