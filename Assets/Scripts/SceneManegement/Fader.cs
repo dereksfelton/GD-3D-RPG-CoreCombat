@@ -3,33 +3,53 @@ using UnityEngine;
 
 namespace RPG.SceneManagement
 {
-    public class Fader : MonoBehaviour
-    {
-        CanvasGroup canvasGroup;
-        private void Awake() {
-            canvasGroup = GetComponent<CanvasGroup>();
-        }
+   public class Fader : MonoBehaviour
+   {
+      CanvasGroup canvasGroup;
+      Coroutine currentlyActiveFade = null;
+      private void Awake()
+      {
+         canvasGroup = GetComponent<CanvasGroup>();
+      }
 
-        public void FadeOutImmediate() {
-            canvasGroup.alpha = 1;
-        }
+      public void FadeOutImmediate()
+      {
+         canvasGroup.alpha = 1;
+      }
 
-        public IEnumerator FadeOut(float time) {
-            // do only while alpha < 1
-            while (canvasGroup.alpha < 1)  {
-                // increment the alpha by delta time / time
-                canvasGroup.alpha += Time.deltaTime / time;
-                yield return null;
-            }
-        }
+      public IEnumerator FadeIn(float time)
+      {
+         return Fade(0, time);
+      }
 
-        public IEnumerator FadeIn(float time) {
-            // do only while alpha > 0
-            while (canvasGroup.alpha > 0)  {
-                // increment the alpha by delta time / time
-                canvasGroup.alpha -= Time.deltaTime / time;
-                yield return null;
-            }
-        }
-    }
+      public IEnumerator FadeOut(float time)
+      {
+         return Fade(1, time);
+      }
+
+      public IEnumerator Fade(float targetAlpha, float time)
+      {
+         // cancel any running coroutines
+         if (currentlyActiveFade != null)
+         {
+            StopCoroutine(currentlyActiveFade);
+         }
+
+         // run the fade coroutine
+         currentlyActiveFade = StartCoroutine(FadeRoutine(targetAlpha, time));
+
+         yield return currentlyActiveFade;
+      }
+
+      private IEnumerator FadeRoutine(float targetAlpha, float time)
+      {
+         // do only while alpha <> the target
+         while (!Mathf.Approximately(canvasGroup.alpha, targetAlpha))
+         {
+            // move the alpha toward the target based on delta time / time
+            canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, Time.deltaTime / time);
+            yield return null;
+         }
+      }
+   }
 }
