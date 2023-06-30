@@ -11,7 +11,7 @@ namespace RPG.Attributes
    public class Health : MonoBehaviour, IJsonSaveable
    {
       [SerializeField] float regnerationPercentage = 70;
-      [SerializeField] UnityEvent takeDamage;
+      [SerializeField] UnityEvent<float> takeDamage;
 
       public float HP {
          get { return healthPoints.value; }
@@ -61,7 +61,7 @@ namespace RPG.Attributes
          }
          else
          {
-            takeDamage.Invoke();
+            takeDamage.Invoke(damage);
          }
       }
 
