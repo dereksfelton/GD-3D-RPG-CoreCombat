@@ -65,6 +65,11 @@ namespace RPG.Attributes
          }
       }
 
+      public void Heal(float healthToRestore)
+      {
+         HP = Mathf.Min(HP + healthToRestore, MaxHP);
+      }
+
       // return percent (0-100) of my max possible health is for my level and class
       public float GetPercentage1to100()
       {
