@@ -45,8 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14be58fca4cad2042b4bd5df9f864558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthComponent: {fileID: 0}
-  foreground: {fileID: 406235058229554174}
+  healthBarImage: {fileID: 7179851107274525209}
 --- !u!1 &2873748323781030706
 GameObject:
   m_ObjectHideFlags: 0

@@ -50,29 +50,27 @@ namespace RPG.Attributes
          GetComponent<BaseStats>().onLevelUp -= RegenerateHealth;
       }
 
-      public void TakeDamage(GameObject instigator, float damage)
+      public void ApplyDamage(GameObject instigator, float damage)
       {
          HP = Mathf.Max(0, HP - damage);
 
-         if (HP == 0)
+         takeDamage.Invoke(damage);
+
+         if (HP == 0 && !IsDead)
          {
-            Die();
             AwardExperience(instigator);
-         }
-         else
-         {
-            takeDamage.Invoke(damage);
+            Die();
          }
       }
 
       // return percent (0-100) of my max possible health is for my level and class
-      public float GetPercentage()
+      public float GetPercentage1to100()
       {
-         return 100 * GetFraction();
+         return 100 * GetPercentage0to1();
       }
 
       // return decimal (0-1) of my max possible health is for my level and class
-      public float GetFraction()
+      public float GetPercentage0to1()
       {
          return HP / GetComponent<BaseStats>().GetStat(Stat.Health);
       }

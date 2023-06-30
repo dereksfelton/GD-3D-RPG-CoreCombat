@@ -116,7 +116,7 @@ namespace RPG.Combat
          }
          else
          {
-            target.TakeDamage(gameObject, damage);
+            target.ApplyDamage(gameObject, damage);
          }
       }
 

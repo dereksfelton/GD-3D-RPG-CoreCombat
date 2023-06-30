@@ -60,7 +60,7 @@ namespace RPG.Combat
          if (target.IsDead) return;
 
          // otherwise, apply my damage to target
-         target.TakeDamage(instigator, damage);
+         target.ApplyDamage(instigator, damage);
 
          // set projectile speed to 0
          speed = 0;
