@@ -12,6 +12,7 @@ namespace RPG.Attributes
    {
       [SerializeField] float regnerationPercentage = 70;
       [SerializeField] UnityEvent<float> takeDamage;
+      [SerializeField] UnityEvent onDie;
 
       public float HP {
          get { return healthPoints.value; }
@@ -56,10 +57,11 @@ namespace RPG.Attributes
 
          takeDamage.Invoke(damage);
 
-         if (HP == 0 && !IsDead)
+         if (Mathf.Approximately(HP, 0) && !IsDead)
          {
-            AwardExperience(instigator);
+            onDie.Invoke();
             Die();
+            AwardExperience(instigator);
          }
       }
 
