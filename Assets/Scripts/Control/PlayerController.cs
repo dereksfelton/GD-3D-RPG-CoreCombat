@@ -1,8 +1,6 @@
 using RPG.Attributes;
 using RPG.Movement;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -11,8 +9,6 @@ namespace RPG.Control
 {
    public class PlayerController : MonoBehaviour
    {
-      Health health;
-
       [System.Serializable]
       struct CursorMapping
       {
@@ -23,7 +19,10 @@ namespace RPG.Control
 
       [SerializeField] CursorMapping[] cursorMappings = null;
       [SerializeField] float maxNavMeshProjectionDistance = 1.0f;
-      
+
+      // cached references
+      Health health;
+
       // cached cursor mapping optimization credit: Brandon Anderson,
       // https://community.gamedev.tv/t/cursor-flicker-and-fps-bug-fix/172245
       private CursorMapping _cachedCursorMapping; 
@@ -51,23 +50,18 @@ namespace RPG.Control
 
       private bool InteractWithComponent()
       {
+         // FILTERED RAYCAST
          // raycast through world, get all hits sorted by distance
-         IEnumerable<RaycastHit> hits = bufferedRaycaster.Raycast(GetMouseRay(), true);
+         IEnumerable<IRaycastable> raycastables = 
+            bufferedRaycaster.FilteredRaycast<IRaycastable>(GetMouseRay(), true);
 
-         // cycle through hit game objects
-         foreach (RaycastHit hit in hits)
+         // cycle through raycastable components
+         foreach (IRaycastable raycastable in raycastables)
          {
-            // get all IRaycastable components in this game object
-            IRaycastable[] raycastables = hit.transform.GetComponents<IRaycastable>();
-
-            // cycle through raycastable components
-            foreach (IRaycastable raycastable in raycastables)
+            if (raycastable.HandleRaycast(this))
             {
-               if (raycastable.HandleRaycast(this))
-               {
-                  SetCursor(raycastable.GetCursorType());
-                  return true;
-               }
+               SetCursor(raycastable.GetCursorType());
+               return true;
             }
          }
          // if nothing was hit, or if nothing handled the raycast, return false

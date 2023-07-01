@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using GameDevTV.Utils;
 using RPG.Attributes;
 using RPG.Combat;
@@ -15,13 +17,15 @@ namespace RPG.Control
       [SerializeField] float waypointDistanceTolerance = 1f; // in meters
       [SerializeField] float waypointDwellTime = 3f; // in seconds
 
-      [SerializeField] float agroCooldown = 5f; // in seconds
+      [SerializeField] float aggroCooldown = 5f; // in seconds
+      [SerializeField] float alertDistance = 5f;
 
       [Range(0, 1)]
       [SerializeField] float patrolSpeedFraction = 0.2f; // as a percentage of Mover.maxSpeed
       [SerializeField] PatrolPath patrolPath;
 
-      private Vector3 GuardPosition {
+      private Vector3 GuardPosition
+      {
          get { return guardPosition.value; }
          set { guardPosition.value = value; }
       }
@@ -38,6 +42,8 @@ namespace RPG.Control
       float timeSinceArrivedAtWaypoint = Mathf.Infinity; // in seconds
       int currentWaypointIndex = 0; // note irrelevant if a PatrolPath isn't assigned
 
+      private BufferedRaycast bufferedRaycaster;
+
       private void Awake()
       {
          fighter = GetComponent<Fighter>();
@@ -46,6 +52,8 @@ namespace RPG.Control
          player = GameObject.FindWithTag("Player");
 
          guardPosition = new LazyValue<Vector3>(GetGuardPosition);
+
+         bufferedRaycaster = new BufferedRaycast(10);
       }
 
       private void Start()
@@ -86,10 +94,27 @@ namespace RPG.Control
          timeSinceLastAggravated = 0;
       }
 
+      public void AggravateNearbyEnemies()
+      {
+         IEnumerable<AIController> nearbyEnemies =
+            bufferedRaycaster.FilteredSphereCast<AIController>(
+               transform.position, // where I'm casting fron
+               alertDistance, // how wide is my sphere
+               Vector3.up, // what direction am I casting? (I'm not here, so any V3 will work)
+               false, // no need to sort by distance
+               0 // the max distance we're casting ... we're not, so it's just 0
+            );
+
+         foreach (AIController ai in nearbyEnemies)
+         {
+            ai.Aggravate();
+         }
+      }
+
       private bool IsAggravated()
       {
          float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-         return distanceToPlayer <= chaseDistance || timeSinceLastAggravated < agroCooldown;
+         return distanceToPlayer <= chaseDistance || timeSinceLastAggravated < aggroCooldown;
       }
 
       private void UpdateTimers()
@@ -103,6 +128,8 @@ namespace RPG.Control
       {
          timeSinceLastSawPlayer = 0;
          fighter.Attack(player);
+
+         AggravateNearbyEnemies();
       }
 
       private void SuspicionBehavior()
