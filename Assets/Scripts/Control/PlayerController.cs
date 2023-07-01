@@ -23,7 +23,6 @@ namespace RPG.Control
 
       [SerializeField] CursorMapping[] cursorMappings = null;
       [SerializeField] float maxNavMeshProjectionDistance = 1.0f;
-      [SerializeField] float maxPathLength = 40f;
       
       // cached cursor mapping optimization credit: Brandon Anderson,
       // https://community.gamedev.tv/t/cursor-flicker-and-fps-bug-fix/172245
@@ -95,6 +94,9 @@ namespace RPG.Control
          {
             if (Input.GetMouseButton(0))
             {
+               // if we can't get to the target, return false
+               if (!GetComponent<Mover>().CanMoveTo(target)) return false;
+
                GetComponent<Mover>().StartMoveAction(target, 1f);
             }
 
@@ -131,44 +133,7 @@ namespace RPG.Control
          // set target and return true if we found a nearby navmesh point
          target = navMeshHit.position;
 
-         // calculate a path to target
-         NavMeshPath path = new NavMeshPath();
-         bool foundPathToTarget = NavMesh.CalculatePath(transform.position,
-                                                        target,
-                                                        NavMesh.AllAreas,
-                                                        path);
-         // if no path was found, return false
-         if (!foundPathToTarget) return false;
-
-         // if path to target isn't complete, return false
-         if (path.status != NavMeshPathStatus.PathComplete) return false;
-
-         // if complete path to target is too long, return false
-         if (PathIsTooLong(path)) return false;
-
          return true;
-      }
-
-      private bool PathIsTooLong(NavMeshPath path)
-      {
-         // start calculating path length from my current position
-         Vector3 currentWaypoint = transform.position;
-         float length = 0;
-         
-         // cycle through path corners
-         foreach (Vector3 nextCorner in path.corners)
-         {
-            // add the distance from my current position to the next corner
-            length += Vector3.Distance(currentWaypoint, nextCorner);
-
-            // if length is longer than the max path length, don't bother caclculating further
-            if (length > maxPathLength) return true;
-            
-            // otherwise, update my current waypoint to the corner
-            currentWaypoint = nextCorner;
-         }
-         // if I've made it this far, the path is NOT too long
-         return false;
       }
 
       private void SetCursor(CursorType type)

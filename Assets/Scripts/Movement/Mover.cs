@@ -10,6 +10,8 @@ namespace RPG.Movement
    public class Mover : MonoBehaviour, IAction, IJsonSaveable
    {
       [SerializeField] float maxSpeed = 6f;
+      [SerializeField] float maxPathLength = 40f;
+
       Transform target;
       NavMeshAgent navMeshAgent;
       Health health;
@@ -33,6 +35,27 @@ namespace RPG.Movement
       {
          GetComponent<ActionScheduler>().StartAction(this);
          MoveTo(destination, speedFraction);
+      }
+
+      // returns whether a point is reachable (physically, or just distance-wise) from my position
+      public bool CanMoveTo(Vector3 destination)
+      {
+         // calculate a path to target
+         NavMeshPath path = new NavMeshPath();
+         bool foundPathToTarget = NavMesh.CalculatePath(transform.position,
+                                                        destination,
+                                                        NavMesh.AllAreas,
+                                                        path);
+         // if no path was found, return false
+         if (!foundPathToTarget) return false;
+
+         // if path to target isn't complete, return false
+         if (path.status != NavMeshPathStatus.PathComplete) return false;
+
+         // if complete path to target is too long, return false
+         if (PathIsTooLong(path)) return false;
+
+         return true;
       }
 
       // make this public because we want it to be called from outside
@@ -63,6 +86,28 @@ namespace RPG.Movement
          // set animator's forwardSpeed value to the speed we calculated...
          // this effectively does what sliding the blend graph to that value would do
          GetComponent<Animator>().SetFloat("forwardSpeed", speed);
+      }
+
+      private bool PathIsTooLong(NavMeshPath path)
+      {
+         // start calculating path length from my current position
+         Vector3 currentWaypoint = transform.position;
+         float length = 0;
+
+         // cycle through path corners
+         foreach (Vector3 nextCorner in path.corners)
+         {
+            // add the distance from my current position to the next corner
+            length += Vector3.Distance(currentWaypoint, nextCorner);
+
+            // if length is longer than the max path length, don't bother caclculating further
+            if (length > maxPathLength) return true;
+
+            // otherwise, update my current waypoint to the corner
+            currentWaypoint = nextCorner;
+         }
+         // if I've made it this far, the path is NOT too long
+         return false;
       }
 
       // implement ISaveable interface_________________________________________________
