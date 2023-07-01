@@ -11,9 +11,11 @@ namespace RPG.Control
    public class AIController : MonoBehaviour
    {
       [SerializeField] float chaseDistance = 5f;
-      [SerializeField] float suspicionDuration = 5f; // in seconds
+      [SerializeField] float suspicionCooldown = 5f; // in seconds
       [SerializeField] float waypointDistanceTolerance = 1f; // in meters
       [SerializeField] float waypointDwellTime = 3f; // in seconds
+
+      [SerializeField] float agroCooldown = 5f; // in seconds
 
       [Range(0, 1)]
       [SerializeField] float patrolSpeedFraction = 0.2f; // as a percentage of Mover.maxSpeed
@@ -32,6 +34,7 @@ namespace RPG.Control
 
       LazyValue<Vector3> guardPosition;
       float timeSinceLastSawPlayer = Mathf.Infinity;
+      float timeSinceLastAggravated = Mathf.Infinity;
       float timeSinceArrivedAtWaypoint = Mathf.Infinity; // in seconds
       int currentWaypointIndex = 0; // note irrelevant if a PatrolPath isn't assigned
 
@@ -60,12 +63,12 @@ namespace RPG.Control
          if (health.IsDead) return; // don't do ANYTHING if you're dead!
 
          // if we're in range of the player and can attack, do so
-         if (InAttackRangeOfPlayer() && fighter.CanAttack(player))
+         if (IsAggravated() && fighter.CanAttack(player))
          {
             AttackBehavior();
          }
          // otherwise, if we're still suspicious, cancel other actions
-         else if (timeSinceLastSawPlayer < suspicionDuration)
+         else if (timeSinceLastSawPlayer < suspicionCooldown)
          {
             SuspicionBehavior();
          }
@@ -78,10 +81,22 @@ namespace RPG.Control
          UpdateTimers();
       }
 
+      public void Aggravate()
+      {
+         timeSinceLastAggravated = 0;
+      }
+
+      private bool IsAggravated()
+      {
+         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+         return distanceToPlayer <= chaseDistance || timeSinceLastAggravated < agroCooldown;
+      }
+
       private void UpdateTimers()
       {
          timeSinceLastSawPlayer += Time.deltaTime;
          timeSinceArrivedAtWaypoint += Time.deltaTime;
+         timeSinceLastAggravated += Time.deltaTime;
       }
 
       private void AttackBehavior()
@@ -131,13 +146,7 @@ namespace RPG.Control
          return patrolPath.GetWaypoint(currentWaypointIndex);
       }
 
-      private bool InAttackRangeOfPlayer()
-      {
-         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-         return distanceToPlayer <= chaseDistance;
-      }
-
-      // called by Unity...
+      // called by Unity ... make attack range sphere visible in editor
       private void OnDrawGizmosSelected()
       {
          Gizmos.color = Color.blue;
