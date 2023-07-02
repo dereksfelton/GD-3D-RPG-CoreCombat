@@ -59,7 +59,7 @@ namespace RPG.Combat
 
          if (target == null || target.IsDead) return;
 
-         if (!TargetIsInRange())
+         if (!TargetIsInRange(target.transform))
          {
             // 0.9f for speedFraction, because we want chasing to be at almost full speed
             mover.MoveTo(target.transform.position, 0.9f);
@@ -127,17 +127,17 @@ namespace RPG.Combat
          }
       }
 
-      private bool TargetIsInRange()
+      private bool TargetIsInRange(Transform targetTransform)
       {
-         return Vector3.Distance(transform.position, target.transform.position) <= currentWeaponConfig.Range;
+         return Vector3.Distance(transform.position, targetTransform.position) <= currentWeaponConfig.Range;
       }
 
       public bool CanAttack(GameObject combatTarget)
       {
          if (combatTarget == null) return false;
 
-         // if we can't get to the target, return false
-         if (!GetComponent<Mover>().CanMoveTo(combatTarget.transform.position)) return false;
+         // if we can't get to the target AND if the target isn't in range, return false
+         if (!mover.CanMoveTo(combatTarget.transform.position) && !TargetIsInRange(combatTarget.transform)) return false;
 
          Health targetToTest = combatTarget.GetComponent<Health>();
          return targetToTest != null && !targetToTest.IsDead;
