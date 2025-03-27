@@ -67,7 +67,7 @@ namespace RPG.SceneManagement
          bool movingToNewMap = sceneBuildIndex != destMapIndex;
 
          // get references to Fader & saving wrapper
-         Fader fader = FindObjectOfType<Fader>();
+         Fader fader = FindFirstObjectByType<Fader>();
          SavingWrapper savingWrapper = FindFirstObjectByType<SavingWrapper>();
 
          // store a local reference to Player's PlayerController component
